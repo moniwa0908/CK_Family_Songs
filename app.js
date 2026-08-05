@@ -296,18 +296,8 @@ function renderSongs() {
   if (album === '__unset__') result = result.filter(song => !String(song.album || '').trim());
   else if (album !== 'all') result = result.filter(song => String(song.album || '').trim() === album);
 
-  const lyrics = $('lyricsFilter')?.value || 'all';
-  if (lyrics === 'with') result = result.filter(song => Boolean(String(song.lyrics || '').trim()));
-  if (lyrics === 'missing') result = result.filter(song => !String(song.lyrics || '').trim());
-
-  const video = $('videoFilter')?.value || 'all';
-  if (video === 'with') result = result.filter(song => Boolean(String(song.link || '').trim()));
-  if (video === 'missing') result = result.filter(song => !String(song.link || '').trim());
-
-  const sort = $('songSort').value;
-  if (sort === 'title') result.sort(compareSongsByKana);
-  if (sort === 'newest') result.sort((a, b) => (b.createdAt?.seconds ?? 0) - (a.createdAt?.seconds ?? 0));
-  if (sort === 'release') result.sort((a, b) => (a.releaseDate || '9999').localeCompare(b.releaseDate || '9999'));
+  // 並び替えの選択欄は表示せず、常に読み仮名順で表示します。
+  result.sort(compareSongsByKana);
   $('songResultCount').textContent = `${result.length}曲を表示／全${songs.length}曲`;
   $('songList').innerHTML = result.length
     ? result.map(songCard).join('')
@@ -568,7 +558,6 @@ $('homeLivesLink')?.addEventListener('click', () => {
 
 $('recentSongsAllBtn')?.addEventListener('click', () => {
   document.querySelector('.bottom-nav button[data-tab="songsTab"]')?.click();
-  $('songSort').value = 'newest';
   renderSongs();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
@@ -719,10 +708,7 @@ $('seedLivesBtn')?.addEventListener('click', importInitialLives);
 
 
 $('songSearch').addEventListener('input', renderSongs);
-$('songSort').addEventListener('change', renderSongs);
 $('albumFilter')?.addEventListener('change', renderSongs);
-$('lyricsFilter')?.addEventListener('change', renderSongs);
-$('videoFilter')?.addEventListener('change', renderSongs);
 $('liveFilter').addEventListener('change', renderLives);
 
 function setLyricsFont(delta) {

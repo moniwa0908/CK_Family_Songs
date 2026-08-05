@@ -1,15 +1,14 @@
-# CK Family Songs Ver.7.0 Part4
+# CK Family Songs Ver.7.1 シンプル曲一覧
 
-## 追加内容
-- ホームに最近追加した曲を最新5曲表示
-- 追加日を表示
-- 曲をタップすると曲詳細を表示
-- 「すべて見る」で曲一覧へ移動し、追加順で表示
+## 変更内容
+- 曲一覧上部の「あいうえお順」選択欄を削除
+- 「歌詞：すべて」選択欄を削除
+- 「動画：すべて」選択欄を削除
+- 曲は内部で読み仮名順に自動表示
+- 検索、アルバム絞り込み、管理者用ボタンは残しています
 
 ## GitHubへ上書きするファイル
 - index.html
 - app.js
 - style.css
 - service-worker.js
-
-firebase-config.js、song-seed.js、song-cleanup.js、live-seed.jsは変更しません。
