@@ -55,7 +55,7 @@
         <section id="songsTab" class="tab-page">
           <div class="toolbar sticky-tools">
             <input id="songSearch" type="search" placeholder="曲名・アルバム・歌詞を検索" />
-            <select id="songSort"><option value="title">曲名順</option><option value="newest">追加順</option><option value="release">発売日順</option></select>
+            <select id="songSort"><option value="title">あいうえお順</option><option value="newest">追加順</option><option value="release">発売日順</option></select>
             <button id="seedSongsBtn" class="ghost admin-only">初期曲名を一括登録</button>
             <button id="addSongBtn" class="primary admin-only">＋ 曲を追加</button>
           </div>
@@ -102,6 +102,7 @@
       <div class="dialog-head"><h2 id="songDialogTitle">曲を追加</h2><button type="button" class="icon-btn close-dialog">×</button></div>
       <input id="songId" type="hidden">
       <label>曲名<input id="songTitle" required></label>
+      <label>ふりがな<input id="songReading" placeholder="英字タイトルなど、読み順を指定するときに入力"></label>
       <div class="two-col"><label>アルバム<input id="songAlbum"></label><label>発売日<input id="songRelease" type="date"></label></div>
       <label>歌詞<textarea id="songLyrics" rows="14" placeholder="ここに歌詞を貼り付けます"></textarea></label>
       <label>メモ<textarea id="songMemo" rows="3"></textarea></label>
@@ -144,6 +145,6 @@
   <dialog id="liveViewDialog"><article class="detail-card"><div class="dialog-head"><div><h2 id="viewLiveTitle"></h2><p id="viewLiveMeta" class="muted"></p></div><button type="button" class="icon-btn close-dialog">×</button></div><button id="editLiveBtn" class="ghost admin-only">編集</button><h3>セットリスト</h3><div id="viewLiveSetlist" class="setlist"></div><p id="viewLiveMemo"></p></article></dialog>
 
   <script type="module" src="app.js"></script>
-  <footer class="app-version">Ver.5.8 ホームリンク対応</footer>
+  <footer class="app-version">Ver.5.9 あいうえお順対応</footer>
 </body>
 </html>

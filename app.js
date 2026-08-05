@@ -35,6 +35,66 @@ const formatDate = value => value
 const configured = !Object.values(firebaseConfig).some(value => String(value).includes('YOUR_'))
   && !String(familyViewerEmail).includes('YOUR_');
 
+
+const songReadingMap = {
+  'TO BE': 'とぅーびー',
+  'YARE YARE': 'やれやれ',
+  'C&K XV': 'しーあんどけーふぃふてぃーん',
+  'DAN': 'だん',
+  'believe': 'びりーぶ',
+  'C&K XIV': 'しーあんどけーふぉーてぃーん',
+  'GENTEN': 'げんてん',
+  'I.M.A': 'いま',
+  'HELLO SAY GOODBYE': 'はろーせいぐっばい',
+  'Brand New Days': 'ぶらんどにゅーでいず',
+  'C&K XIII': 'しーあんどけーさーてぃーん',
+  'KARADANONAKADAKARADA': 'からだのなかだからだ',
+  'ONE DAY': 'わんでい',
+  'Alma': 'あるま',
+  'traveling carnival〜移動式遊園地のテーマ〜': 'とらべりんぐかーにばるいどうしきゆうえんちのてーま',
+  'C&K XI': 'しーあんどけーいれぶん',
+  'Drive!!!': 'どらいぶ',
+  'TANSAN FLAVOR': 'たんさんふれーばー',
+  'Home': 'ほーむ',
+  'MAMANIE': 'ままにえ',
+  'Y': 'わい',
+  'APAP': 'えーぴーえーぴー',
+  'Sun Son Sound feat.九州男': 'さんさんさうんどふぃーちゃりんぐくすお',
+  'MATSURI': 'まつり',
+  'to di Bone': 'とぅでぃぼーん',
+  'milky way': 'みるきーうぇい',
+  'HOTEL NETTAI-YA': 'ほてるねったいや',
+  'JOY A LIFE': 'じょいあらいふ',
+  'DANCE☆MAN(WOKKY WOKKY×BOGGIE WOGGIE)': 'だんすまんうぉっきーうぉっきーぶぎーうぎー',
+  'EVERYBODY': 'えぶりばでぃ',
+  'AND MORE...': 'あんどもあ',
+  'JIMOTO with カサリンチュ': 'じもとうぃずかさりんちゅ',
+  'BYE BYE BOO': 'ばいばいぶー',
+  'GET@LADY': 'げっとあれでぃ',
+  'C&KΦ': 'しーあんどけーふぁい',
+  'C&K XII': 'しーあんどけーとぅえるぶ'
+};
+
+const kanaCollator = new Intl.Collator('ja', { sensitivity: 'base', numeric: true });
+
+function normalizeReading(value) {
+  return String(value || '')
+    .normalize('NFKC')
+    .toLocaleLowerCase('ja')
+    .replace(/[\s・･!！?？'"“”‘’.,，。☆★@＆&()（）\-ー〜~]/g, '');
+}
+
+function getSongReading(song) {
+  const reading = String(song.reading || songReadingMap[song.title] || song.title || '').trim();
+  return normalizeReading(reading);
+}
+
+function compareSongsByKana(a, b) {
+  const readingResult = kanaCollator.compare(getSongReading(a), getSongReading(b));
+  if (readingResult !== 0) return readingResult;
+  return kanaCollator.compare(String(a.title || ''), String(b.title || ''));
+}
+
 const favorites = new Set(JSON.parse(localStorage.getItem('ck-favorites') || '[]'));
 let lyricsFontSize = Number(localStorage.getItem('ck-lyrics-font-size') || 14);
 let auth;
@@ -202,10 +262,11 @@ function renderSongs() {
   const term = $('songSearch').value.trim().toLocaleLowerCase('ja');
   if (term) {
     result = result.filter(song => [song.title, song.album, song.lyrics, song.memo]
-      .some(value => String(value || '').toLocaleLowerCase('ja').includes(term)));
+      .some(value => String(value || '').toLocaleLowerCase('ja').includes(term))
+      || getSongReading(song).includes(normalizeReading(term)));
   }
   const sort = $('songSort').value;
-  if (sort === 'title') result.sort((a, b) => a.title.localeCompare(b.title, 'ja'));
+  if (sort === 'title') result.sort(compareSongsByKana);
   if (sort === 'release') result.sort((a, b) => (a.releaseDate || '9999').localeCompare(b.releaseDate || '9999'));
   $('songList').innerHTML = result.length
     ? result.map(songCard).join('')
@@ -313,6 +374,7 @@ function openSongForm(song = null) {
   $('songForm').reset();
   $('songId').value = song?.id || '';
   $('songTitle').value = song?.title || '';
+  $('songReading').value = song?.reading || songReadingMap[song?.title] || '';
   $('songAlbum').value = song?.album || '';
   $('songRelease').value = song?.releaseDate || '';
   $('songLyrics').value = song?.lyrics || '';
@@ -328,6 +390,7 @@ $('songForm').addEventListener('submit', async event => {
   const id = $('songId').value;
   const data = {
     title: $('songTitle').value.trim(),
+    reading: $('songReading').value.trim(),
     album: $('songAlbum').value.trim(),
     releaseDate: $('songRelease').value,
     lyrics: $('songLyrics').value,
@@ -463,6 +526,7 @@ async function importInitialSongs() {
       const ref = doc(collection(db, 'songs'));
       batch.set(ref, {
         title: song.title,
+        reading: song.reading || songReadingMap[song.title] || '',
         album: song.album || '',
         releaseDate: song.releaseDate || '',
         lyrics: '',
