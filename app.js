@@ -296,7 +296,7 @@ function renderSongs() {
   if (album === '__unset__') result = result.filter(song => !String(song.album || '').trim());
   else if (album !== 'all') result = result.filter(song => String(song.album || '').trim() === album);
 
-  // 並び替えの選択欄は表示せず、常に読み仮名順で表示します。
+  // 曲一覧は選択欄を置かず、常に読み仮名のあいうえお順で表示します。
   result.sort(compareSongsByKana);
   $('songResultCount').textContent = `${result.length}曲を表示／全${songs.length}曲`;
   $('songList').innerHTML = result.length
