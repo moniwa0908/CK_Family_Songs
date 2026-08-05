@@ -19,7 +19,7 @@
         <h1>CK Family Songs</h1>
         <p class="muted">家族で見る、曲・歌詞・ライブ予定</p>
         <form id="familyLoginForm">
-          <label>家族用の合言葉<input id="familyPassphrase" type="password" autocomplete="current-password" required></label>
+          <label>家族用の合言葉<input id="familyPassphrase" type="text" inputmode="text" autocomplete="off" autocapitalize="none" spellcheck="false" required></label>
           <button class="primary full-button" type="submit">アプリを開く</button>
         </form>
         <p id="loginError" class="error"></p>
@@ -127,6 +127,6 @@
   <dialog id="liveViewDialog"><article class="detail-card"><div class="dialog-head"><div><h2 id="viewLiveTitle"></h2><p id="viewLiveMeta" class="muted"></p></div><button type="button" class="icon-btn close-dialog">×</button></div><button id="editLiveBtn" class="ghost admin-only">編集</button><h3>セットリスト</h3><pre id="viewLiveSetlist" class="setlist"></pre><p id="viewLiveMemo"></p></article></dialog>
 
   <script type="module" src="app.js"></script>
-<footer class="app-version">Ver.4 家族共有版</footer>
+<footer class="app-version">Ver.4.1 日本語合言葉対応</footer>
 </body>
 </html>
