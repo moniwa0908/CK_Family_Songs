@@ -16,9 +16,11 @@ import {
   getDocs,
   getFirestore,
   serverTimestamp,
-  updateDoc
+  updateDoc,
+  writeBatch
 } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 import { firebaseConfig, familyViewerEmail } from './firebase-config.js';
+import { initialSongs } from './song-seed.js';
 
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>'"]/g, char => ({
@@ -415,6 +417,48 @@ document.querySelectorAll('.bottom-nav button').forEach(button => {
     $(button.dataset.tab).classList.add('active');
   });
 });
+
+async function importInitialSongs() {
+  if (role !== 'admin') return;
+  const existingTitles = new Set(songs.map(song => String(song.title || '').trim().toLocaleLowerCase('ja')));
+  const missing = initialSongs.filter(song => !existingTitles.has(song.title.trim().toLocaleLowerCase('ja')));
+  if (!missing.length) {
+    alert('初期曲名はすべて登録済みです。');
+    return;
+  }
+  if (!confirm(`${missing.length}曲を一括登録します。歌詞欄は空欄です。よろしいですか？`)) return;
+  const button = $('seedSongsBtn');
+  button.disabled = true;
+  button.textContent = '登録中…';
+  try {
+    const batch = writeBatch(db);
+    missing.forEach(song => {
+      const ref = doc(collection(db, 'songs'));
+      batch.set(ref, {
+        title: song.title,
+        album: song.album || '',
+        releaseDate: song.releaseDate || '',
+        lyrics: '',
+        memo: '初期曲名リストから登録',
+        link: '',
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+    });
+    await batch.commit();
+    await reloadAll();
+    alert(`${missing.length}曲を登録しました。`);
+  } catch (error) {
+    console.error(error);
+    alert('一括登録に失敗しました。もう一度お試しください。');
+  } finally {
+    button.disabled = false;
+    button.textContent = '初期曲名を一括登録';
+  }
+}
+
+$('seedSongsBtn')?.addEventListener('click', importInitialSongs);
+
 $('songSearch').addEventListener('input', renderSongs);
 $('songSort').addEventListener('change', renderSongs);
 $('liveFilter').addEventListener('change', renderLives);
