@@ -1,0 +1,65 @@
+CK Family Songs Ver.4 最終接続版
+================================
+
+Firebase側で完了しているもの
+----------------------------
+・Firestore Database作成
+・Authenticationのメール／パスワード有効化
+・管理者ユーザー作成
+・家族閲覧ユーザー作成
+・users/{管理者UID} に role = admin
+・users/{家族UID} に role = viewer
+
+次に行うこと
+------------
+
+1. Firestoreルール
+   Firebase Console → Firestore Database → ルール
+   このフォルダの firestore.rules の内容へ丸ごと置き換え、［公開］を押します。
+
+2. Firebase接続情報の取得
+   Firebase Console左上の歯車 → プロジェクトの設定 → 全般
+   下へスクロールし「マイアプリ」のWebアプリを開きます。
+   「SDKの設定と構成」で［構成］を選ぶと firebaseConfig が表示されます。
+
+3. firebase-config.js を編集
+   firebase-config.jsをメモ帳で開き、次をFirebaseの表示内容へ置き換えます。
+   ・apiKey
+   ・authDomain
+   ・projectId
+   ・storageBucket
+   ・messagingSenderId
+   ・appId
+
+   familyViewerEmailには、Authenticationで作った家族閲覧用ユーザーの
+   メールアドレスを入力します。
+
+   注意：先頭の「export const」は消さないでください。
+
+4. GitHubへアップロード
+   このフォルダの中にあるファイルをすべて、リポジトリの一番上へアップロードします。
+   フォルダごと一段下へ入れないでください。
+
+5. GitHub Pages
+   Settings → Pages
+   Source: Deploy from a branch
+   Branch: main
+   Folder: /(root)
+   Save
+
+6. Firebaseの承認済みドメイン
+   Authentication → 設定 → 承認済みドメイン
+   moniwa0908.github.io を追加します。
+
+使い方
+------
+・家族：合言葉のみ入力。内部では家族閲覧ユーザーとしてログインします。
+・管理者：画面内の「管理者ログイン」から自分のメールアドレスとパスワードを入力します。
+・viewerは曲とライブの閲覧のみ可能です。
+・adminだけ追加・編集・削除できます。
+
+重要
+----
+合言葉はFirebase Authenticationの家族閲覧ユーザーのパスワードです。
+Firebaseのパスワードは6文字以上必要です。日本語も使用できますが、
+文字数の数え方による混乱を避けるため、6文字以上の分かりやすい合言葉を推奨します。
