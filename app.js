@@ -258,6 +258,18 @@ function bindSongCards(root) {
   });
 }
 
+function refreshAlbumFilter() {
+  const select = $('albumFilter');
+  if (!select) return;
+  const current = select.value;
+  const albums = [...new Set(songs.map(song => String(song.album || '').trim()).filter(Boolean))]
+    .sort((a, b) => kanaCollator.compare(a, b));
+  select.innerHTML = '<option value="all">全アルバム</option>'
+    + '<option value="__unset__">アルバム未設定</option>'
+    + albums.map(album => `<option value="${esc(album)}">${esc(album)}</option>`).join('');
+  if ([...select.options].some(option => option.value === current)) select.value = current;
+}
+
 function renderSongs() {
   let result = [...songs];
   const term = $('songSearch').value.trim().toLocaleLowerCase('ja');
@@ -266,9 +278,23 @@ function renderSongs() {
       .some(value => String(value || '').toLocaleLowerCase('ja').includes(term))
       || getSongReading(song).includes(normalizeReading(term)));
   }
+
+  const album = $('albumFilter')?.value || 'all';
+  if (album === '__unset__') result = result.filter(song => !String(song.album || '').trim());
+  else if (album !== 'all') result = result.filter(song => String(song.album || '').trim() === album);
+
+  const lyrics = $('lyricsFilter')?.value || 'all';
+  if (lyrics === 'with') result = result.filter(song => Boolean(String(song.lyrics || '').trim()));
+  if (lyrics === 'missing') result = result.filter(song => !String(song.lyrics || '').trim());
+
+  const video = $('videoFilter')?.value || 'all';
+  if (video === 'with') result = result.filter(song => Boolean(String(song.link || '').trim()));
+  if (video === 'missing') result = result.filter(song => !String(song.link || '').trim());
+
   const sort = $('songSort').value;
   if (sort === 'title') result.sort(compareSongsByKana);
   if (sort === 'release') result.sort((a, b) => (a.releaseDate || '9999').localeCompare(b.releaseDate || '9999'));
+  $('songResultCount').textContent = `${result.length}曲を表示／全${songs.length}曲`;
   $('songList').innerHTML = result.length
     ? result.map(songCard).join('')
     : '<div class="item-card muted">該当する曲はありません。</div>';
@@ -322,6 +348,7 @@ function renderHome() {
 }
 
 function renderAll() {
+  refreshAlbumFilter();
   renderSongs();
   renderLives();
   renderFavorites();
@@ -653,6 +680,9 @@ $('seedLivesBtn')?.addEventListener('click', importInitialLives);
 
 $('songSearch').addEventListener('input', renderSongs);
 $('songSort').addEventListener('change', renderSongs);
+$('albumFilter')?.addEventListener('change', renderSongs);
+$('lyricsFilter')?.addEventListener('change', renderSongs);
+$('videoFilter')?.addEventListener('change', renderSongs);
 $('liveFilter').addEventListener('change', renderLives);
 
 function setLyricsFont(delta) {

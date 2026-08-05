@@ -53,13 +53,17 @@
         </section>
 
         <section id="songsTab" class="tab-page">
-          <div class="toolbar sticky-tools">
-            <input id="songSearch" type="search" placeholder="曲名・アルバム・歌詞を検索" />
+          <div class="toolbar song-toolbar sticky-tools">
+            <input id="songSearch" type="search" placeholder="曲名・ふりがな・アルバム・歌詞を検索" />
             <select id="songSort"><option value="title">あいうえお順</option><option value="newest">追加順</option><option value="release">発売日順</option></select>
+            <select id="albumFilter"><option value="all">全アルバム</option></select>
+            <select id="lyricsFilter"><option value="all">歌詞：すべて</option><option value="with">歌詞入力済み</option><option value="missing">歌詞未入力</option></select>
+            <select id="videoFilter"><option value="all">動画：すべて</option><option value="with">動画登録済み</option><option value="missing">動画未登録</option></select>
             <button id="seedSongsBtn" class="ghost admin-only">初期曲名を一括登録</button>
             <button id="cleanupSongsBtn" class="ghost admin-only">曲データを整える</button>
             <button id="addSongBtn" class="primary admin-only">＋ 曲を追加</button>
           </div>
+          <div id="songResultCount" class="filter-summary muted"></div>
           <div id="songList" class="card-list"></div>
         </section>
 
@@ -145,6 +149,6 @@
   <dialog id="liveViewDialog"><article class="detail-card"><div class="dialog-head"><div><h2 id="viewLiveTitle"></h2><p id="viewLiveMeta" class="muted"></p></div><button type="button" class="icon-btn close-dialog">×</button></div><button id="editLiveBtn" class="ghost admin-only">編集</button><h3>セットリスト</h3><div id="viewLiveSetlist" class="setlist"></div><p id="viewLiveMemo"></p></article></dialog>
 
   <script type="module" src="app.js"></script>
-  <footer class="app-version">Ver.5.9 あいうえお順対応</footer>
+  <footer class="app-version">Ver.7.0 Part3 絞り込み対応</footer>
 </body>
 </html>

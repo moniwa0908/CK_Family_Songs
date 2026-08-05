@@ -10,3 +10,5 @@
 .check-label input{width:20px;height:20px;margin:0}
 
 .stat-link{appearance:none;color:inherit;font-family:inherit;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}.stat-link:active{transform:scale(.97)}.stat-link:focus-visible{outline:3px solid #94a3b8;outline-offset:2px}
+
+.song-toolbar{grid-template-columns:minmax(180px,1fr) repeat(4,minmax(120px,auto));align-items:center}.song-toolbar .admin-only{white-space:nowrap}.filter-summary{font-size:13px;margin:-4px 4px 12px}.song-toolbar select{min-width:0}@media(max-width:760px){.song-toolbar{grid-template-columns:1fr 1fr}.song-toolbar #songSearch{grid-column:1/-1}.song-toolbar .admin-only{grid-column:auto}}@media(max-width:430px){.song-toolbar{grid-template-columns:1fr}.song-toolbar #songSearch,.song-toolbar .admin-only{grid-column:1}}
