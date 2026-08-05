@@ -64,7 +64,7 @@
 
         <section id="livesTab" class="tab-page">
           <div class="toolbar live-toolbar sticky-tools">
-            <select id="liveFilter"><option value="all">すべて</option><option value="upcoming">今後</option><option value="past">過去</option></select>
+            <select id="liveFilter"><option value="all">すべて</option><option value="upcoming">今後</option><option value="past">過去</option><option value="attending">参加予定</option></select>
             <button id="seedLivesBtn" class="ghost admin-only">ライブ予定を一括登録</button>
             <button id="addLiveBtn" class="primary admin-only">＋ ライブを追加</button>
           </div>
@@ -134,6 +134,7 @@
       <div class="two-col"><label>開催日<input id="liveDate" type="date" required></label><label>開演時刻<input id="liveTime" type="time"></label></div>
       <label>会場<input id="liveVenue"></label>
       <label>座席・チケット情報<input id="liveSeat"></label>
+      <label class="check-label"><input id="liveAttending" type="checkbox"> 今後行く予定として強調表示する</label>
       <label>セットリスト<textarea id="liveSetlist" rows="10" placeholder="1曲ごとに改行"></textarea></label>
       <label>メモ<textarea id="liveMemo" rows="4"></textarea></label>
       <div class="dialog-actions"><button type="button" id="deleteLiveBtn" class="danger hidden">削除</button><span></span><button type="button" class="ghost close-dialog">キャンセル</button><button type="submit" class="primary">保存</button></div>
@@ -143,6 +144,6 @@
   <dialog id="liveViewDialog"><article class="detail-card"><div class="dialog-head"><div><h2 id="viewLiveTitle"></h2><p id="viewLiveMeta" class="muted"></p></div><button type="button" class="icon-btn close-dialog">×</button></div><button id="editLiveBtn" class="ghost admin-only">編集</button><h3>セットリスト</h3><div id="viewLiveSetlist" class="setlist"></div><p id="viewLiveMemo"></p></article></dialog>
 
   <script type="module" src="app.js"></script>
-  <footer class="app-version">Ver.5.5 ライブ予定追加対応</footer>
+  <footer class="app-version">Ver.5.7 参加予定強調対応</footer>
 </body>
 </html>

@@ -225,18 +225,25 @@ function renderLives() {
   const today = new Date().toISOString().slice(0, 10);
   const ordered = [...lives].sort((a, b) => (a.date || '').localeCompare(b.date || ''));
   const filter = $('liveFilter')?.value || 'all';
-  const shown = ordered.filter(live => filter === 'all' || (filter === 'upcoming' ? live.date >= today : live.date < today));
+  const shown = ordered.filter(live => {
+    if (filter === 'all') return true;
+    if (filter === 'attending') return Boolean(live.attending) && live.date >= today;
+    return filter === 'upcoming' ? live.date >= today : live.date < today;
+  });
   $('liveList').innerHTML = shown.length
-    ? shown.map(live => `<article class="item-card"><button class="card-open" data-live="${live.id}">
-        <span class="date-chip">${live.date >= today ? '今後' : '過去'}</span>
+    ? shown.map(live => {
+        const attending = Boolean(live.attending) && live.date >= today;
+        return `<article class="item-card live-card ${attending ? 'attending-live' : ''}"><button class="card-open" data-live="${live.id}">
+        <div class="live-badges"><span class="date-chip">${live.date >= today ? '今後' : '過去'}</span>${attending ? '<span class="attending-chip">★ 参加予定</span>' : ''}</div>
         <h3>${esc(live.title)}</h3>
         <div class="item-meta">${esc(formatDate(live.date))}${live.time ? ` ${esc(live.time)}` : ''} ・ ${esc(live.venue || '会場未設定')}</div>
-      </button></article>`).join('')
+      </button></article>`;
+      }).join('')
     : '<div class="item-card muted">該当するライブはありません。</div>';
   $('liveList').querySelectorAll('[data-live]').forEach(button => {
     button.addEventListener('click', () => openLive(button.dataset.live));
   });
-  const next = ordered.find(live => live.date >= today);
+  const next = ordered.find(live => live.attending && live.date >= today) || ordered.find(live => live.date >= today);
   $('nextLiveTitle').textContent = next ? next.title : '今後のライブ予定はありません';
   $('nextLiveMeta').textContent = next ? `${formatDate(next.date)} ${next.time || ''} ${next.venue || ''}`.trim() : '';
 }
@@ -354,7 +361,7 @@ $('addLiveBtn').addEventListener('click', () => openLiveForm());
 function openLive(id) {
   currentLive = lives.find(live => live.id === id);
   if (!currentLive) return;
-  $('viewLiveTitle').textContent = currentLive.title;
+  $('viewLiveTitle').textContent = `${currentLive.attending ? '★ ' : ''}${currentLive.title}`;
   $('viewLiveMeta').textContent = `${formatDate(currentLive.date)} ${currentLive.time || ''} ・ ${currentLive.venue || ''}${currentLive.seat ? ` ・ ${currentLive.seat}` : ''}`;
   renderSetlist(currentLive.setlist || '');
   $('viewLiveMemo').textContent = currentLive.memo || '';
@@ -375,6 +382,7 @@ function openLiveForm(live = null) {
   $('liveTime').value = live?.time || '';
   $('liveVenue').value = live?.venue || '';
   $('liveSeat').value = live?.seat || '';
+  $('liveAttending').checked = Boolean(live?.attending);
   $('liveSetlist').value = live?.setlist || '';
   $('liveMemo').value = live?.memo || '';
   $('liveDialogTitle').textContent = live ? 'ライブを編集' : 'ライブを追加';
@@ -391,6 +399,7 @@ $('liveForm').addEventListener('submit', async event => {
     time: $('liveTime').value,
     venue: $('liveVenue').value.trim(),
     seat: $('liveSeat').value.trim(),
+    attending: $('liveAttending').checked,
     setlist: $('liveSetlist').value,
     memo: $('liveMemo').value.trim(),
     updatedAt: serverTimestamp()
@@ -489,6 +498,7 @@ async function importInitialLives() {
         time: live.time || '',
         venue: live.venue || '',
         seat: live.seat || '',
+        attending: false,
         setlist: live.setlist || '',
         memo: live.memo || '',
         createdAt: serverTimestamp(),
