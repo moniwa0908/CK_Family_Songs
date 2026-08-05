@@ -1,9 +1,10 @@
-const CACHE_NAME = 'ck-family-songs-v5-1';
+const CACHE_NAME = 'ck-family-songs-v5-3';
 const APP_FILES = [
   './',
   './index.html',
   './style.css',
   './app.js',
+  './song-seed.js',
   './firebase-config.js',
   './manifest.json',
   './icon.svg'

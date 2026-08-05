@@ -104,7 +104,7 @@
       <div class="two-col"><label>アルバム<input id="songAlbum"></label><label>発売日<input id="songRelease" type="date"></label></div>
       <label>歌詞<textarea id="songLyrics" rows="14" placeholder="ここに歌詞を貼り付けます"></textarea></label>
       <label>メモ<textarea id="songMemo" rows="3"></textarea></label>
-      <label>外部リンク<input id="songLink" type="url" placeholder="YouTubeや公式ページ"></label>
+      <label>YouTube・公式動画URL<input id="songLink" type="url" placeholder="https://youtu.be/...（空欄でも検索できます）"></label>
       <div class="dialog-actions"><button type="button" id="deleteSongBtn" class="danger hidden">削除</button><span></span><button type="button" class="ghost close-dialog">キャンセル</button><button type="submit" class="primary">保存</button></div>
     </form>
   </dialog>
@@ -114,6 +114,8 @@
       <div class="dialog-head"><div><h2 id="viewSongTitle"></h2><p id="viewSongMeta" class="muted"></p></div><button type="button" class="icon-btn close-dialog">×</button></div>
       <div class="detail-actions wrap-actions">
         <button id="favoriteBtn" class="ghost">♡ お気に入り</button>
+        <button id="youtubeBtn" class="primary">▶ YouTubeで検索</button>
+        <button id="copyLyricsBtn" class="ghost">歌詞をコピー</button>
         <button id="editSongBtn" class="ghost admin-only">編集</button>
         <button id="fontDownBtn" class="ghost" aria-label="文字を小さく">A−</button>
         <button id="fontUpBtn" class="ghost" aria-label="文字を大きく">A＋</button>
@@ -124,7 +126,7 @@
       </div>
       <pre id="viewSongLyrics" class="lyrics"></pre>
       <p id="viewSongMemo"></p>
-      <a id="viewSongLink" class="link-btn hidden" target="_blank" rel="noopener">外部リンクを開く</a>
+      <a id="viewSongLink" class="link-btn hidden" target="_blank" rel="noopener">▶ 登録済み動画を開く</a>
     </article>
   </dialog>
 
@@ -145,6 +147,6 @@
   <dialog id="liveViewDialog"><article class="detail-card"><div class="dialog-head"><div><h2 id="viewLiveTitle"></h2><p id="viewLiveMeta" class="muted"></p></div><button type="button" class="icon-btn close-dialog">×</button></div><button id="editLiveBtn" class="ghost admin-only">編集</button><h3>セットリスト</h3><div id="viewLiveSetlist" class="setlist"></div><p id="viewLiveMemo"></p></article></dialog>
 
   <script type="module" src="app.js"></script>
-  <footer class="app-version">Ver.5.2 初期曲名登録</footer>
+  <footer class="app-version">Ver.5.3 YouTube検索対応</footer>
 </body>
 </html>
