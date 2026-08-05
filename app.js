@@ -540,6 +540,8 @@ document.querySelectorAll('.bottom-nav button').forEach(button => {
     document.querySelectorAll('.tab-page').forEach(page => page.classList.remove('active'));
     button.classList.add('active');
     $(button.dataset.tab).classList.add('active');
+    // タブを切り替えたときは、検索・絞り込み欄がタイトル直下に見える位置へ戻します。
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   });
 });
 
