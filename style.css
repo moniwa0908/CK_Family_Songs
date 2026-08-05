@@ -50,3 +50,14 @@
     grid-column:1;
   }
 }
+
+
+/* Ver.7.1.4: 家族閲覧モードでは操作欄をタイトル直下へ格納 */
+.topbar{display:block;padding-left:16px;padding-right:16px}
+.topbar-row{display:flex;justify-content:space-between;align-items:center}
+.viewer-tools-host{margin:10px -16px -12px;padding:10px 14px 12px;background:var(--bg);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.viewer-tools-host .toolbar{position:static!important;top:auto!important;margin:0!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important}
+.viewer-tools-host .song-toolbar,.viewer-tools-host .live-toolbar{display:grid;grid-template-columns:1fr;gap:8px}
+.viewer-tools-host .admin-only{display:none!important}
+.viewer-tools-host input,.viewer-tools-host select{padding:10px 12px;border-radius:12px}
+@media(max-width:420px){.topbar-row{align-items:center}}

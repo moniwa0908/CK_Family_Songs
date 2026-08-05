@@ -114,6 +114,43 @@ let lyricsFontSize = Number(localStorage.getItem('ck-lyrics-font-size') || 14);
 let auth;
 let db;
 let role = 'viewer';
+const viewerToolOrigins = new Map();
+['.song-toolbar', '.live-toolbar'].forEach(selector => {
+  const element = document.querySelector(selector);
+  if (element) viewerToolOrigins.set(element, { parent: element.parentNode, next: element.nextSibling });
+});
+
+function restoreViewerTools() {
+  viewerToolOrigins.forEach((origin, element) => {
+    if (origin.next && origin.next.parentNode === origin.parent) origin.parent.insertBefore(element, origin.next);
+    else origin.parent.appendChild(element);
+  });
+}
+
+function updateViewerTools() {
+  const host = $('viewerToolsHost');
+  if (!host) return;
+  if (role !== 'viewer') {
+    restoreViewerTools();
+    host.classList.add('hidden');
+    host.replaceChildren();
+    return;
+  }
+  const activeTab = document.querySelector('.tab-page.active')?.id;
+  const toolbar = activeTab === 'songsTab'
+    ? document.querySelector('.song-toolbar')
+    : activeTab === 'livesTab'
+      ? document.querySelector('.live-toolbar')
+      : null;
+  host.replaceChildren();
+  if (toolbar) {
+    host.appendChild(toolbar);
+    host.classList.remove('hidden');
+  } else {
+    host.classList.add('hidden');
+  }
+}
+
 let songs = [];
 let lives = [];
 let currentSong = null;
@@ -223,6 +260,7 @@ if (configured) {
         element.classList.toggle('hidden', role !== 'admin');
       });
       $('logoutBtn').classList.toggle('hidden', role !== 'admin');
+      updateViewerTools();
       $('loginView').classList.add('hidden');
       $('mainView').classList.remove('hidden');
       await reloadAll();
@@ -540,6 +578,7 @@ document.querySelectorAll('.bottom-nav button').forEach(button => {
     document.querySelectorAll('.tab-page').forEach(page => page.classList.remove('active'));
     button.classList.add('active');
     $(button.dataset.tab).classList.add('active');
+    updateViewerTools();
     // タブを切り替えたときは、検索・絞り込み欄がタイトル直下に見える位置へ戻します。
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   });
