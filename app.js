@@ -158,7 +158,28 @@ function openAdminLogin() {
 }
 
 $('showAdminLoginBtn').addEventListener('click', openAdminLogin);
-$('adminLoginBtn').addEventListener('click', openAdminLogin);
+
+// 家族画面をすっきり保つため、アプリ名の長押しで管理者ログインを開きます。
+let adminPressTimer = null;
+const appTitleAccess = $('appTitleAccess');
+const startAdminPress = () => {
+  if (role === 'admin') return;
+  clearTimeout(adminPressTimer);
+  adminPressTimer = setTimeout(openAdminLogin, 700);
+};
+const cancelAdminPress = () => {
+  clearTimeout(adminPressTimer);
+  adminPressTimer = null;
+};
+appTitleAccess.addEventListener('touchstart', startAdminPress, { passive: true });
+appTitleAccess.addEventListener('touchend', cancelAdminPress);
+appTitleAccess.addEventListener('touchcancel', cancelAdminPress);
+appTitleAccess.addEventListener('mousedown', startAdminPress);
+appTitleAccess.addEventListener('mouseup', cancelAdminPress);
+appTitleAccess.addEventListener('mouseleave', cancelAdminPress);
+appTitleAccess.addEventListener('dblclick', () => {
+  if (role !== 'admin') openAdminLogin();
+});
 $('adminLoginForm').addEventListener('submit', async event => {
   event.preventDefault();
   if (!configured) return;
@@ -196,11 +217,12 @@ if (configured) {
       role = roleSnapshot.data().role;
       if (!['admin', 'viewer'].includes(role)) throw new Error('invalid role');
 
-      $('roleBadge').textContent = role === 'admin' ? '管理者モード' : '家族閲覧モード';
+      $('roleBadge').textContent = role === 'admin' ? '管理者モード' : '';
+      $('roleBadge').classList.toggle('hidden', role !== 'admin');
       document.querySelectorAll('.admin-only').forEach(element => {
         element.classList.toggle('hidden', role !== 'admin');
       });
-      $('adminLoginBtn').classList.toggle('hidden', role === 'admin');
+      $('logoutBtn').classList.toggle('hidden', role !== 'admin');
       $('loginView').classList.add('hidden');
       $('mainView').classList.remove('hidden');
       await reloadAll();
@@ -340,35 +362,11 @@ function renderLives() {
   $('nextLiveMeta').textContent = next ? `${formatDate(next.date)} ${next.time || ''} ${next.venue || ''}`.trim() : '';
 }
 
-function recentSongCard(song) {
-  const added = formatAddedDate(song.createdAt);
-  const album = song.album || 'アルバム未設定';
-  return `<article class="item-card recent-song-card">
-    <button class="card-open" data-song="${song.id}">
-      <div class="recent-song-row">
-        <div>
-          <h3>${esc(song.title)}</h3>
-          <div class="item-meta">${esc(album)}</div>
-        </div>
-        ${added ? `<span class="new-song-chip">${esc(added)}追加</span>` : '<span class="new-song-chip">NEW</span>'}
-      </div>
-    </button>
-  </article>`;
-}
-
 function renderHome() {
   $('songCount').textContent = songs.length;
   $('liveCount').textContent = lives.length;
   $('favoriteCount').textContent = favorites.size;
-  const latest = [...songs]
-    .sort((a, b) => (b.createdAt?.seconds ?? 0) - (a.createdAt?.seconds ?? 0))
-    .slice(0, 5);
-  $('recentSongs').innerHTML = latest.length
-    ? latest.map(recentSongCard).join('')
-    : '<div class="item-card muted">管理者が曲を登録すると、ここに表示されます。</div>';
-  bindSongCards($('recentSongs'));
 }
-
 function renderAll() {
   refreshAlbumFilter();
   renderSongs();
@@ -556,11 +554,7 @@ $('homeLivesLink')?.addEventListener('click', () => {
 });
 
 
-$('recentSongsAllBtn')?.addEventListener('click', () => {
-  document.querySelector('.bottom-nav button[data-tab="songsTab"]')?.click();
-  renderSongs();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
+
 
 async function importInitialSongs() {
   if (role !== 'admin') return;

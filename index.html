@@ -32,8 +32,11 @@
     <section id="mainView" class="hidden">
       <div id="dataError" class="error-banner hidden"></div>
       <header class="topbar">
-        <div><strong>CK Family Songs</strong><div id="roleBadge" class="role-badge"></div></div>
-        <div class="top-actions"><button id="adminLoginBtn" class="ghost hidden">管理者ログイン</button><button id="logoutBtn" class="ghost">ロック</button></div>
+        <div>
+          <button id="appTitleAccess" class="app-title-button" type="button" aria-label="CK Family Songs">CK Family Songs</button>
+          <div id="roleBadge" class="role-badge hidden"></div>
+        </div>
+        <div class="top-actions"><button id="logoutBtn" class="ghost hidden">ログアウト</button></div>
       </header>
 
       <main>
@@ -48,8 +51,6 @@
             <button id="homeLivesLink" class="stat-card stat-link" type="button"><strong id="liveCount">0</strong><span>ライブ</span></button>
             <div class="stat-card"><strong id="favoriteCount">0</strong><span>お気に入り</span></div>
           </div>
-          <div class="section-title"><h2>最近追加した曲</h2><button id="recentSongsAllBtn" class="text-link-button" type="button">すべて見る</button></div>
-          <div id="recentSongs" class="card-list"></div>
         </section>
 
         <section id="songsTab" class="tab-page">
