@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ck-family-v5-7-attending';
+const CACHE_NAME = 'ck-family-v5-8-home-links';
 const APP_FILES = [
   './',
   './index.html',

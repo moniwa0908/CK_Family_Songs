@@ -435,6 +435,16 @@ document.querySelectorAll('.bottom-nav button').forEach(button => {
   });
 });
 
+$('homeSongsLink')?.addEventListener('click', () => {
+  document.querySelector('.bottom-nav button[data-tab="songsTab"]')?.click();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+$('homeLivesLink')?.addEventListener('click', () => {
+  document.querySelector('.bottom-nav button[data-tab="livesTab"]')?.click();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
 async function importInitialSongs() {
   if (role !== 'admin') return;
   const existingTitles = new Set(songs.map(song => String(song.title || '').trim().toLocaleLowerCase('ja')));
