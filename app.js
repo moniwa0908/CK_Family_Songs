@@ -15,8 +15,6 @@ import {
   getDoc,
   getDocs,
   getFirestore,
-  orderBy,
-  query,
   serverTimestamp,
   updateDoc
 } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
@@ -142,17 +140,30 @@ async function reloadAll() {
   if (loading) return;
   loading = true;
   try {
+    // 空のコレクションでも確実に読み込めるよう、並べ替えは取得後にアプリ側で行います。
     const [songSnapshot, liveSnapshot] = await Promise.all([
-      getDocs(query(collection(db, 'songs'), orderBy('createdAt', 'desc'))),
-      getDocs(query(collection(db, 'lives'), orderBy('date', 'asc')))
+      getDocs(collection(db, 'songs')),
+      getDocs(collection(db, 'lives'))
     ]);
-    songs = songSnapshot.docs.map(item => ({ id: item.id, ...item.data() }));
-    lives = liveSnapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+
+    songs = songSnapshot.docs
+      .map(item => ({ id: item.id, ...item.data() }))
+      .sort((a, b) => {
+        const aTime = a.createdAt?.seconds ?? 0;
+        const bTime = b.createdAt?.seconds ?? 0;
+        return bTime - aTime;
+      });
+
+    lives = liveSnapshot.docs
+      .map(item => ({ id: item.id, ...item.data() }))
+      .sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')));
+
     renderAll();
     showError($('dataError'), '');
   } catch (error) {
-    console.error(error);
-    showError($('dataError'), 'データを読み込めませんでした。Firestoreのルールを公開したか確認してください。');
+    console.error('Firestore load error:', error);
+    const code = error?.code ? `（${error.code}）` : '';
+    showError($('dataError'), `データを読み込めませんでした${code}。一度ロックして、合言葉で入り直してください。`);
   } finally {
     loading = false;
   }
