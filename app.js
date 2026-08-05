@@ -35,6 +35,8 @@ const configured = !Object.values(firebaseConfig).some(value => String(value).in
   && !String(familyViewerEmail).includes('YOUR_');
 
 const favorites = new Set(JSON.parse(localStorage.getItem('ck-favorites') || '[]'));
+let lyricsFontSize = Number(localStorage.getItem('ck-lyrics-font-size') || 18);
+let scrollTimer = null;
 let auth;
 let db;
 let role = 'viewer';
@@ -209,12 +211,15 @@ function renderFavorites() {
 function renderLives() {
   const today = new Date().toISOString().slice(0, 10);
   const ordered = [...lives].sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-  $('liveList').innerHTML = ordered.length
-    ? ordered.map(live => `<article class="item-card"><button class="card-open" data-live="${live.id}">
+  const filter = $('liveFilter')?.value || 'all';
+  const shown = ordered.filter(live => filter === 'all' || (filter === 'upcoming' ? live.date >= today : live.date < today));
+  $('liveList').innerHTML = shown.length
+    ? shown.map(live => `<article class="item-card"><button class="card-open" data-live="${live.id}">
+        <span class="date-chip">${live.date >= today ? '今後' : '過去'}</span>
         <h3>${esc(live.title)}</h3>
         <div class="item-meta">${esc(formatDate(live.date))}${live.time ? ` ${esc(live.time)}` : ''} ・ ${esc(live.venue || '会場未設定')}</div>
       </button></article>`).join('')
-    : '<div class="item-card muted">ライブ予定がまだ登録されていません。</div>';
+    : '<div class="item-card muted">該当するライブはありません。</div>';
   $('liveList').querySelectorAll('[data-live]').forEach(button => {
     button.addEventListener('click', () => openLive(button.dataset.live));
   });
@@ -224,6 +229,9 @@ function renderLives() {
 }
 
 function renderHome() {
+  $('songCount').textContent = songs.length;
+  $('liveCount').textContent = lives.length;
+  $('favoriteCount').textContent = favorites.size;
   const latest = songs.slice(0, 4);
   $('recentSongs').innerHTML = latest.length
     ? latest.map(songCard).join('')
@@ -250,7 +258,10 @@ function openSong(id) {
   $('viewSongTitle').textContent = currentSong.title;
   $('viewSongMeta').textContent = [currentSong.album, currentSong.releaseDate ? formatDate(currentSong.releaseDate) : '']
     .filter(Boolean).join(' ・ ');
+  stopAutoScroll();
   $('viewSongLyrics').textContent = currentSong.lyrics || '歌詞はまだ登録されていません。';
+  $('viewSongLyrics').style.fontSize = `${lyricsFontSize}px`;
+  $('autoScrollBtn').textContent = '▶ 自動スクロール';
   $('viewSongMemo').textContent = currentSong.memo || '';
   $('viewSongLink').classList.toggle('hidden', !currentSong.link);
   $('viewSongLink').href = currentSong.link || '#';
@@ -324,7 +335,7 @@ function openLive(id) {
   if (!currentLive) return;
   $('viewLiveTitle').textContent = currentLive.title;
   $('viewLiveMeta').textContent = `${formatDate(currentLive.date)} ${currentLive.time || ''} ・ ${currentLive.venue || ''}${currentLive.seat ? ` ・ ${currentLive.seat}` : ''}`;
-  $('viewLiveSetlist').textContent = currentLive.setlist || 'セットリストはまだ登録されていません。';
+  renderSetlist(currentLive.setlist || '');
   $('viewLiveMemo').textContent = currentLive.memo || '';
   $('liveViewDialog').showModal();
 }
@@ -395,6 +406,62 @@ document.querySelectorAll('.bottom-nav button').forEach(button => {
 });
 $('songSearch').addEventListener('input', renderSongs);
 $('songSort').addEventListener('change', renderSongs);
+$('liveFilter').addEventListener('change', renderLives);
+
+function setLyricsFont(delta) {
+  lyricsFontSize = Math.max(14, Math.min(32, lyricsFontSize + delta));
+  localStorage.setItem('ck-lyrics-font-size', String(lyricsFontSize));
+  $('viewSongLyrics').style.fontSize = `${lyricsFontSize}px`;
+}
+$('fontDownBtn').addEventListener('click', () => setLyricsFont(-2));
+$('fontUpBtn').addEventListener('click', () => setLyricsFont(2));
+
+function stopAutoScroll() {
+  if (scrollTimer) cancelAnimationFrame(scrollTimer);
+  scrollTimer = null;
+}
+function autoScrollStep() {
+  const dialog = $('songViewDialog');
+  if (!dialog.open) return stopAutoScroll();
+  const speed = Number($('scrollSpeed').value || 2);
+  dialog.scrollTop += 0.25 + speed * 0.22;
+  if (dialog.scrollTop + dialog.clientHeight >= dialog.scrollHeight - 2) {
+    stopAutoScroll();
+    $('autoScrollBtn').textContent = '▶ 自動スクロール';
+    return;
+  }
+  scrollTimer = requestAnimationFrame(autoScrollStep);
+}
+$('autoScrollBtn').addEventListener('click', () => {
+  if (scrollTimer) {
+    stopAutoScroll();
+    $('autoScrollBtn').textContent = '▶ 自動スクロール';
+  } else {
+    $('autoScrollBtn').textContent = '■ 停止';
+    scrollTimer = requestAnimationFrame(autoScrollStep);
+  }
+});
+$('songViewDialog').addEventListener('close', stopAutoScroll);
+
+function normalizeSongName(value) {
+  return String(value || '').replace(/^\s*\d+[.．)）、:\-]?\s*/, '').trim().toLocaleLowerCase('ja');
+}
+function renderSetlist(text) {
+  const lines = text.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+  if (!lines.length) {
+    $('viewLiveSetlist').innerHTML = '<div class="muted">セットリストはまだ登録されていません。</div>';
+    return;
+  }
+  $('viewLiveSetlist').innerHTML = lines.map((line, index) => {
+    const normalized = normalizeSongName(line);
+    const song = songs.find(item => normalizeSongName(item.title) === normalized);
+    return `<div class="setlist-row"><span class="setlist-number">${index + 1}</span><button class="setlist-song ${song ? 'linked' : ''}" ${song ? `data-setlist-song="${song.id}"` : 'disabled'}>${esc(line.replace(/^\s*\d+[.．)）、:\-]?\s*/, ''))}</button></div>`;
+  }).join('');
+  $('viewLiveSetlist').querySelectorAll('[data-setlist-song]').forEach(button => button.addEventListener('click', () => {
+    $('liveViewDialog').close();
+    openSong(button.dataset.setlistSong);
+  }));
+}
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./service-worker.js').catch(console.error);

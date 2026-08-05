@@ -19,12 +19,13 @@
         <h1>CK Family Songs</h1>
         <p class="muted">家族で見る、曲・歌詞・ライブ予定</p>
         <form id="familyLoginForm">
-          <label>家族用の合言葉<input id="familyPassphrase" type="text" inputmode="text" autocomplete="off" autocapitalize="none" spellcheck="false" required></label>
+          <label>家族用の合言葉
+            <input id="familyPassphrase" type="text" inputmode="text" lang="ja" autocapitalize="none" autocomplete="off" required>
+          </label>
           <button class="primary full-button" type="submit">アプリを開く</button>
         </form>
         <p id="loginError" class="error"></p>
         <button id="showAdminLoginBtn" class="text-button" type="button">管理者としてログイン</button>
-        <details class="setup-help"><summary>初回設定について</summary><p>Firebase設定が必要です。付属の「設定手順.txt」をご確認ください。</p></details>
       </div>
     </section>
 
@@ -42,6 +43,11 @@
             <h2 id="nextLiveTitle">予定を読み込み中…</h2>
             <p id="nextLiveMeta" class="muted"></p>
           </div>
+          <div class="stats-grid">
+            <div class="stat-card"><strong id="songCount">0</strong><span>登録曲</span></div>
+            <div class="stat-card"><strong id="liveCount">0</strong><span>ライブ</span></div>
+            <div class="stat-card"><strong id="favoriteCount">0</strong><span>お気に入り</span></div>
+          </div>
           <div class="section-title"><h2>最近追加した曲</h2></div>
           <div id="recentSongs" class="card-list"></div>
         </section>
@@ -56,7 +62,10 @@
         </section>
 
         <section id="livesTab" class="tab-page">
-          <div class="toolbar sticky-tools"><button id="addLiveBtn" class="primary admin-only">＋ ライブを追加</button></div>
+          <div class="toolbar live-toolbar sticky-tools">
+            <select id="liveFilter"><option value="all">すべて</option><option value="upcoming">今後</option><option value="past">過去</option></select>
+            <button id="addLiveBtn" class="primary admin-only">＋ ライブを追加</button>
+          </div>
           <div id="liveList" class="card-list"></div>
         </section>
 
@@ -75,7 +84,6 @@
     </section>
   </div>
 
-
   <dialog id="adminLoginDialog">
     <form id="adminLoginForm" class="dialog-form">
       <div class="dialog-head"><h2>管理者ログイン</h2><button type="button" class="icon-btn close-dialog">×</button></div>
@@ -88,7 +96,7 @@
   </dialog>
 
   <dialog id="songDialog">
-    <form id="songForm" method="dialog" class="dialog-form">
+    <form id="songForm" class="dialog-form">
       <div class="dialog-head"><h2 id="songDialogTitle">曲を追加</h2><button type="button" class="icon-btn close-dialog">×</button></div>
       <input id="songId" type="hidden">
       <label>曲名<input id="songTitle" required></label>
@@ -103,7 +111,16 @@
   <dialog id="songViewDialog">
     <article class="detail-card">
       <div class="dialog-head"><div><h2 id="viewSongTitle"></h2><p id="viewSongMeta" class="muted"></p></div><button type="button" class="icon-btn close-dialog">×</button></div>
-      <div class="detail-actions"><button id="favoriteBtn" class="ghost">♡ お気に入り</button><button id="editSongBtn" class="ghost admin-only">編集</button></div>
+      <div class="detail-actions wrap-actions">
+        <button id="favoriteBtn" class="ghost">♡ お気に入り</button>
+        <button id="editSongBtn" class="ghost admin-only">編集</button>
+        <button id="fontDownBtn" class="ghost" aria-label="文字を小さく">A−</button>
+        <button id="fontUpBtn" class="ghost" aria-label="文字を大きく">A＋</button>
+      </div>
+      <div class="scroll-controls">
+        <button id="autoScrollBtn" class="primary">▶ 自動スクロール</button>
+        <label>速度 <input id="scrollSpeed" type="range" min="1" max="5" value="2"></label>
+      </div>
       <pre id="viewSongLyrics" class="lyrics"></pre>
       <p id="viewSongMemo"></p>
       <a id="viewSongLink" class="link-btn hidden" target="_blank" rel="noopener">外部リンクを開く</a>
@@ -111,7 +128,7 @@
   </dialog>
 
   <dialog id="liveDialog">
-    <form id="liveForm" method="dialog" class="dialog-form">
+    <form id="liveForm" class="dialog-form">
       <div class="dialog-head"><h2 id="liveDialogTitle">ライブを追加</h2><button type="button" class="icon-btn close-dialog">×</button></div>
       <input id="liveId" type="hidden">
       <label>公演名<input id="liveTitle" required></label>
@@ -124,9 +141,9 @@
     </form>
   </dialog>
 
-  <dialog id="liveViewDialog"><article class="detail-card"><div class="dialog-head"><div><h2 id="viewLiveTitle"></h2><p id="viewLiveMeta" class="muted"></p></div><button type="button" class="icon-btn close-dialog">×</button></div><button id="editLiveBtn" class="ghost admin-only">編集</button><h3>セットリスト</h3><pre id="viewLiveSetlist" class="setlist"></pre><p id="viewLiveMemo"></p></article></dialog>
+  <dialog id="liveViewDialog"><article class="detail-card"><div class="dialog-head"><div><h2 id="viewLiveTitle"></h2><p id="viewLiveMeta" class="muted"></p></div><button type="button" class="icon-btn close-dialog">×</button></div><button id="editLiveBtn" class="ghost admin-only">編集</button><h3>セットリスト</h3><div id="viewLiveSetlist" class="setlist"></div><p id="viewLiveMemo"></p></article></dialog>
 
   <script type="module" src="app.js"></script>
-<footer class="app-version">Ver.4.1 日本語合言葉対応</footer>
+  <footer class="app-version">Ver.5</footer>
 </body>
 </html>
