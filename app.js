@@ -33,6 +33,19 @@ const formatDate = value => value
       .format(new Date(`${value}T00:00:00`))
   : '';
 
+const timestampToDate = value => {
+  if (!value) return null;
+  if (typeof value.toDate === 'function') return value.toDate();
+  if (typeof value.seconds === 'number') return new Date(value.seconds * 1000);
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+};
+
+const formatAddedDate = value => {
+  const date = timestampToDate(value);
+  return date ? new Intl.DateTimeFormat('ja-JP', { month: 'numeric', day: 'numeric' }).format(date) : '';
+};
+
 const configured = !Object.values(firebaseConfig).some(value => String(value).includes('YOUR_'))
   && !String(familyViewerEmail).includes('YOUR_');
 
@@ -293,6 +306,7 @@ function renderSongs() {
 
   const sort = $('songSort').value;
   if (sort === 'title') result.sort(compareSongsByKana);
+  if (sort === 'newest') result.sort((a, b) => (b.createdAt?.seconds ?? 0) - (a.createdAt?.seconds ?? 0));
   if (sort === 'release') result.sort((a, b) => (a.releaseDate || '9999').localeCompare(b.releaseDate || '9999'));
   $('songResultCount').textContent = `${result.length}曲を表示／全${songs.length}曲`;
   $('songList').innerHTML = result.length
@@ -336,13 +350,31 @@ function renderLives() {
   $('nextLiveMeta').textContent = next ? `${formatDate(next.date)} ${next.time || ''} ${next.venue || ''}`.trim() : '';
 }
 
+function recentSongCard(song) {
+  const added = formatAddedDate(song.createdAt);
+  const album = song.album || 'アルバム未設定';
+  return `<article class="item-card recent-song-card">
+    <button class="card-open" data-song="${song.id}">
+      <div class="recent-song-row">
+        <div>
+          <h3>${esc(song.title)}</h3>
+          <div class="item-meta">${esc(album)}</div>
+        </div>
+        ${added ? `<span class="new-song-chip">${esc(added)}追加</span>` : '<span class="new-song-chip">NEW</span>'}
+      </div>
+    </button>
+  </article>`;
+}
+
 function renderHome() {
   $('songCount').textContent = songs.length;
   $('liveCount').textContent = lives.length;
   $('favoriteCount').textContent = favorites.size;
-  const latest = songs.slice(0, 4);
+  const latest = [...songs]
+    .sort((a, b) => (b.createdAt?.seconds ?? 0) - (a.createdAt?.seconds ?? 0))
+    .slice(0, 5);
   $('recentSongs').innerHTML = latest.length
-    ? latest.map(songCard).join('')
+    ? latest.map(recentSongCard).join('')
     : '<div class="item-card muted">管理者が曲を登録すると、ここに表示されます。</div>';
   bindSongCards($('recentSongs'));
 }
@@ -530,6 +562,14 @@ $('homeSongsLink')?.addEventListener('click', () => {
 
 $('homeLivesLink')?.addEventListener('click', () => {
   document.querySelector('.bottom-nav button[data-tab="livesTab"]')?.click();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+
+$('recentSongsAllBtn')?.addEventListener('click', () => {
+  document.querySelector('.bottom-nav button[data-tab="songsTab"]')?.click();
+  $('songSort').value = 'newest';
+  renderSongs();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 

@@ -1,18 +1,15 @@
-# CK Family Songs Ver.7.0 Part2
+# CK Family Songs Ver.7.0 Part4
 
-登録済みの曲名表記とふりがなを整理する更新です。
+## 追加内容
+- ホームに最近追加した曲を最新5曲表示
+- 追加日を表示
+- 曲をタップすると曲詳細を表示
+- 「すべて見る」で曲一覧へ移動し、追加順で表示
 
-## GitHubへアップロードするファイル
+## GitHubへ上書きするファイル
 - index.html
 - app.js
-- song-cleanup.js（新規）
+- style.css
 - service-worker.js
 
-`firebase-config.js`、`song-seed.js`、`live-seed.js`は現在のものを残してください。
-
-## 反映後の操作
-1. 管理者ログイン
-2. 曲一覧を開く
-3. 「曲データを整える」を1回押す
-
-歌詞、動画URL、メモは保持されます。表記揺れの重複がある場合は内容を可能な範囲で統合します。
+firebase-config.js、song-seed.js、song-cleanup.js、live-seed.jsは変更しません。
