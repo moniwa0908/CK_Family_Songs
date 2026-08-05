@@ -342,10 +342,8 @@ function openSong(id) {
   $('viewSongLyrics').textContent = currentSong.lyrics || '歌詞はまだ登録されていません。';
   $('viewSongLyrics').style.fontSize = `${lyricsFontSize}px`;
   $('viewSongMemo').textContent = currentSong.memo || '';
-  $('viewSongLink').classList.toggle('hidden', !currentSong.link);
-  $('viewSongLink').href = currentSong.link || '#';
-  $('viewSongLink').textContent = '▶ 登録済み動画を開く';
-  $('youtubeBtn').textContent = currentSong.link ? '▶ YouTubeで検索' : '▶ YouTubeで検索';
+  $('youtubeBtn').classList.toggle('hidden', !currentSong.link);
+  $('youtubeBtn').textContent = '▶ 登録済み動画を再生';
   $('favoriteBtn').textContent = favorites.has(id) ? '♥ お気に入り済み' : '♡ お気に入り';
   $('songViewDialog').showModal();
 }
@@ -357,9 +355,8 @@ $('favoriteBtn').addEventListener('click', () => {
 });
 
 $('youtubeBtn').addEventListener('click', () => {
-  if (!currentSong) return;
-  const query = encodeURIComponent(`C&K ${currentSong.title}`);
-  window.open(`https://www.youtube.com/results?search_query=${query}`, '_blank', 'noopener');
+  if (!currentSong?.link) return;
+  window.open(currentSong.link, '_blank', 'noopener');
 });
 
 
