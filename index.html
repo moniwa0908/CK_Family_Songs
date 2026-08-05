@@ -65,6 +65,7 @@
         <section id="livesTab" class="tab-page">
           <div class="toolbar live-toolbar sticky-tools">
             <select id="liveFilter"><option value="all">すべて</option><option value="upcoming">今後</option><option value="past">過去</option></select>
+            <button id="seedLivesBtn" class="ghost admin-only">ライブ予定を一括登録</button>
             <button id="addLiveBtn" class="primary admin-only">＋ ライブを追加</button>
           </div>
           <div id="liveList" class="card-list"></div>
@@ -142,6 +143,6 @@
   <dialog id="liveViewDialog"><article class="detail-card"><div class="dialog-head"><div><h2 id="viewLiveTitle"></h2><p id="viewLiveMeta" class="muted"></p></div><button type="button" class="icon-btn close-dialog">×</button></div><button id="editLiveBtn" class="ghost admin-only">編集</button><h3>セットリスト</h3><div id="viewLiveSetlist" class="setlist"></div><p id="viewLiveMemo"></p></article></dialog>
 
   <script type="module" src="app.js"></script>
-  <footer class="app-version">Ver.5.4 YouTube検索対応</footer>
+  <footer class="app-version">Ver.5.5 ライブ予定追加対応</footer>
 </body>
 </html>

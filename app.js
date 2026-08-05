@@ -21,6 +21,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 import { firebaseConfig, familyViewerEmail } from './firebase-config.js';
 import { initialSongs } from './song-seed.js';
+import { initialLives } from './live-seed.js';
 
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>'"]/g, char => ({
@@ -465,6 +466,49 @@ async function importInitialSongs() {
 }
 
 $('seedSongsBtn')?.addEventListener('click', importInitialSongs);
+
+async function importInitialLives() {
+  if (role !== 'admin') return;
+  const existingKeys = new Set(lives.map(live => `${String(live.date || '').trim()}|${String(live.title || '').trim().toLocaleLowerCase('ja')}`));
+  const missing = initialLives.filter(live => !existingKeys.has(`${live.date}|${live.title.trim().toLocaleLowerCase('ja')}`));
+  if (!missing.length) {
+    alert('確認済みのライブ予定はすべて登録済みです。');
+    return;
+  }
+  if (!confirm(`${missing.length}件のライブ予定を一括登録します。日程変更の可能性があるため、公式サイトもあわせてご確認ください。`)) return;
+  const button = $('seedLivesBtn');
+  button.disabled = true;
+  button.textContent = '登録中…';
+  try {
+    const batch = writeBatch(db);
+    missing.forEach(live => {
+      const ref = doc(collection(db, 'lives'));
+      batch.set(ref, {
+        title: live.title,
+        date: live.date,
+        time: live.time || '',
+        venue: live.venue || '',
+        seat: live.seat || '',
+        setlist: live.setlist || '',
+        memo: live.memo || '',
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+    });
+    await batch.commit();
+    await reloadAll();
+    alert(`${missing.length}件のライブ予定を登録しました。`);
+  } catch (error) {
+    console.error(error);
+    alert('ライブ予定の一括登録に失敗しました。もう一度お試しください。');
+  } finally {
+    button.disabled = false;
+    button.textContent = 'ライブ予定を一括登録';
+  }
+}
+
+$('seedLivesBtn')?.addEventListener('click', importInitialLives);
+
 
 $('songSearch').addEventListener('input', renderSongs);
 $('songSort').addEventListener('change', renderSongs);
