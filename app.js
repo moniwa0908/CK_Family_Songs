@@ -35,8 +35,7 @@ const configured = !Object.values(firebaseConfig).some(value => String(value).in
   && !String(familyViewerEmail).includes('YOUR_');
 
 const favorites = new Set(JSON.parse(localStorage.getItem('ck-favorites') || '[]'));
-let lyricsFontSize = Number(localStorage.getItem('ck-lyrics-font-size') || 18);
-let scrollTimer = null;
+let lyricsFontSize = Number(localStorage.getItem('ck-lyrics-font-size') || 14);
 let auth;
 let db;
 let role = 'viewer';
@@ -271,16 +270,13 @@ function openSong(id) {
   $('viewSongTitle').textContent = currentSong.title;
   $('viewSongMeta').textContent = [currentSong.album, currentSong.releaseDate ? formatDate(currentSong.releaseDate) : '']
     .filter(Boolean).join(' ・ ');
-  stopAutoScroll();
   $('viewSongLyrics').textContent = currentSong.lyrics || '歌詞はまだ登録されていません。';
   $('viewSongLyrics').style.fontSize = `${lyricsFontSize}px`;
-  $('autoScrollBtn').textContent = '▶ 自動スクロール';
   $('viewSongMemo').textContent = currentSong.memo || '';
   $('viewSongLink').classList.toggle('hidden', !currentSong.link);
   $('viewSongLink').href = currentSong.link || '#';
   $('viewSongLink').textContent = '▶ 登録済み動画を開く';
   $('youtubeBtn').textContent = currentSong.link ? '▶ YouTubeで検索' : '▶ YouTubeで検索';
-  $('copyLyricsBtn').disabled = !currentSong.lyrics;
   $('favoriteBtn').textContent = favorites.has(id) ? '♥ お気に入り済み' : '♡ お気に入り';
   $('songViewDialog').showModal();
 }
@@ -297,30 +293,7 @@ $('youtubeBtn').addEventListener('click', () => {
   window.open(`https://www.youtube.com/results?search_query=${query}`, '_blank', 'noopener');
 });
 
-$('copyLyricsBtn').addEventListener('click', async () => {
-  if (!currentSong?.lyrics) {
-    alert('コピーできる歌詞がまだ登録されていません。');
-    return;
-  }
-  try {
-    await navigator.clipboard.writeText(currentSong.lyrics);
-    const button = $('copyLyricsBtn');
-    const previous = button.textContent;
-    button.textContent = 'コピーしました';
-    setTimeout(() => { button.textContent = previous; }, 1500);
-  } catch (error) {
-    console.error(error);
-    const area = document.createElement('textarea');
-    area.value = currentSong.lyrics;
-    area.style.position = 'fixed';
-    area.style.opacity = '0';
-    document.body.appendChild(area);
-    area.select();
-    document.execCommand('copy');
-    area.remove();
-    alert('歌詞をコピーしました。');
-  }
-});
+
 $('editSongBtn').addEventListener('click', () => {
   if (!currentSong) return;
   $('songViewDialog').close();
@@ -505,32 +478,7 @@ function setLyricsFont(delta) {
 $('fontDownBtn').addEventListener('click', () => setLyricsFont(-2));
 $('fontUpBtn').addEventListener('click', () => setLyricsFont(2));
 
-function stopAutoScroll() {
-  if (scrollTimer) cancelAnimationFrame(scrollTimer);
-  scrollTimer = null;
-}
-function autoScrollStep() {
-  const dialog = $('songViewDialog');
-  if (!dialog.open) return stopAutoScroll();
-  const speed = Number($('scrollSpeed').value || 2);
-  dialog.scrollTop += 0.25 + speed * 0.22;
-  if (dialog.scrollTop + dialog.clientHeight >= dialog.scrollHeight - 2) {
-    stopAutoScroll();
-    $('autoScrollBtn').textContent = '▶ 自動スクロール';
-    return;
-  }
-  scrollTimer = requestAnimationFrame(autoScrollStep);
-}
-$('autoScrollBtn').addEventListener('click', () => {
-  if (scrollTimer) {
-    stopAutoScroll();
-    $('autoScrollBtn').textContent = '▶ 自動スクロール';
-  } else {
-    $('autoScrollBtn').textContent = '■ 停止';
-    scrollTimer = requestAnimationFrame(autoScrollStep);
-  }
-});
-$('songViewDialog').addEventListener('close', stopAutoScroll);
+
 
 function normalizeSongName(value) {
   return String(value || '').replace(/^\s*\d+[.．)）、:\-]?\s*/, '').trim().toLocaleLowerCase('ja');
