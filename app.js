@@ -21,6 +21,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 import { firebaseConfig, familyViewerEmail } from './firebase-config.js';
 import { initialSongs } from './song-seed.js';
+import { songCleanupData } from './song-cleanup.js';
 import { initialLives } from './live-seed.js';
 
 const $ = id => document.getElementById(id);
@@ -546,6 +547,65 @@ async function importInitialSongs() {
 }
 
 $('seedSongsBtn')?.addEventListener('click', importInitialSongs);
+
+async function cleanupSongData() {
+  if (role !== 'admin') return;
+  if (!confirm('登録済み曲の表記とふりがなを整理します。歌詞・動画URL・メモは消えません。よろしいですか？')) return;
+  const button = $('cleanupSongsBtn');
+  button.disabled = true;
+  button.textContent = '整理中…';
+  try {
+    const lookup = new Map(songCleanupData.map(item => [String(item.title).normalize('NFKC').trim().toLocaleLowerCase('ja'), item]));
+    const byTitle = new Map(songs.map(song => [String(song.title || '').normalize('NFKC').trim().toLocaleLowerCase('ja'), song]));
+    let updated = 0;
+    let merged = 0;
+    const batch = writeBatch(db);
+    for (const song of songs) {
+      const key = String(song.title || '').normalize('NFKC').trim().toLocaleLowerCase('ja');
+      const data = lookup.get(key);
+      if (!data) continue;
+      const canonicalTitle = data.canonicalTitle || data.title;
+      const canonicalKey = canonicalTitle.normalize('NFKC').trim().toLocaleLowerCase('ja');
+      const existingCanonical = byTitle.get(canonicalKey);
+      if (data.canonicalTitle && existingCanonical && existingCanonical.id !== song.id) {
+        const mergeFields = {};
+        if (!existingCanonical.lyrics && song.lyrics) mergeFields.lyrics = song.lyrics;
+        if (!existingCanonical.link && song.link) mergeFields.link = song.link;
+        if (!existingCanonical.memo && song.memo) mergeFields.memo = song.memo;
+        if (!existingCanonical.album && song.album) mergeFields.album = song.album;
+        if (!existingCanonical.releaseDate && song.releaseDate) mergeFields.releaseDate = song.releaseDate;
+        if (!existingCanonical.reading && data.reading) mergeFields.reading = data.reading;
+        if (Object.keys(mergeFields).length) {
+          mergeFields.updatedAt = serverTimestamp();
+          batch.update(doc(db, 'songs', existingCanonical.id), mergeFields);
+        }
+        batch.delete(doc(db, 'songs', song.id));
+        merged++;
+        continue;
+      }
+      const changes = {};
+      if (canonicalTitle !== song.title) changes.title = canonicalTitle;
+      if (data.reading && data.reading !== song.reading) changes.reading = data.reading;
+      if (Object.keys(changes).length) {
+        changes.updatedAt = serverTimestamp();
+        batch.update(doc(db, 'songs', song.id), changes);
+        updated++;
+      }
+    }
+    await batch.commit();
+    await reloadAll();
+    alert(`曲データを整理しました。更新 ${updated}件、重複統合 ${merged}件です。`);
+  } catch (error) {
+    console.error(error);
+    alert('曲データの整理に失敗しました。もう一度お試しください。');
+  } finally {
+    button.disabled = false;
+    button.textContent = '曲データを整える';
+  }
+}
+
+$('cleanupSongsBtn')?.addEventListener('click', cleanupSongData);
+
 
 async function importInitialLives() {
   if (role !== 'admin') return;

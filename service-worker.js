@@ -1,10 +1,11 @@
-const CACHE_NAME = 'ck-family-songs-v7-0-part1';
+const CACHE_NAME = 'ck-family-songs-v7-0-part2';
 const APP_FILES = [
   './',
   './index.html',
   './style.css',
   './app.js',
   './song-seed.js',
+  './song-cleanup.js',
   './live-seed.js',
   './firebase-config.js',
   './manifest.json',
