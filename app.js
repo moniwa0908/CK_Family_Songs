@@ -41,6 +41,18 @@ const timestampToDate = value => {
   return Number.isNaN(parsed.getTime()) ? null : parsed;
 };
 
+
+const getJstDateKey = () => {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Tokyo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).formatToParts(new Date());
+  const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+};
+
 const formatAddedDate = value => {
   const date = timestampToDate(value);
   return date ? new Intl.DateTimeFormat('ja-JP', { month: 'numeric', day: 'numeric' }).format(date) : '';
@@ -374,7 +386,7 @@ function renderFavorites() {
 }
 
 function renderLives() {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getJstDateKey();
   const ordered = [...lives].sort((a, b) => (a.date || '').localeCompare(b.date || ''));
   const filter = $('liveFilter')?.value || 'all';
   const shown = ordered.filter(live => {

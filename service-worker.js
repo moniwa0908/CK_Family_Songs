@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ck-family-songs-v7-2-embedded-youtube';
+const CACHE_NAME = 'ck-family-songs-v7-2-1-jst-live-fix';
 const APP_FILES = [
   './',
   './index.html',

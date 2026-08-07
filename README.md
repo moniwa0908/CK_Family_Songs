@@ -1,14 +1,9 @@
-# CK Family Songs Ver.7.2
+# CK Family Songs Ver.7.2.1
 
-## 変更内容
-- 登録済みYouTube動画を曲詳細画面内に埋め込み表示
-- 動画を再生したまま、その下の歌詞をスクロール可能
-- 「動画を閉じる」と「YouTubeで開く」を追加
-- 埋め込みに変換できないURLは従来どおり外部で開く
-- Firebase・曲・歌詞・ライブデータには変更なし
+ライブ日付判定を日本時間（Asia/Tokyo）基準に修正しました。
 
-## GitHubへ上書きするファイル
-- index.html
+GitHubへ上書きするファイル:
 - app.js
-- style.css
 - service-worker.js
+
+日本時間の0:00を過ぎると、NEXT LIVEとライブ一覧の今後/過去判定が次の日へ切り替わります。
