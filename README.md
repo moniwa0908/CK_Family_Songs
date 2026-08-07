@@ -1,9 +1,9 @@
-# CK Family Songs Ver.7.2.1
+# CK Family Songs Ver.7.2.2
 
-ライブ日付判定を日本時間（Asia/Tokyo）基準に修正しました。
+曲一覧の「全アルバム」プルダウンだけを削除した更新版です。
 
 GitHubへ上書きするファイル:
-- app.js
+- index.html
 - service-worker.js
 
-日本時間の0:00を過ぎると、NEXT LIVEとライブ一覧の今後/過去判定が次の日へ切り替わります。
+Firebase、app.js、style.css、登録済みデータには変更ありません。
