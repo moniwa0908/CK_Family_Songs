@@ -61,3 +61,44 @@
 .viewer-tools-host .admin-only{display:none!important}
 .viewer-tools-host input,.viewer-tools-host select{padding:10px 12px;border-radius:12px}
 @media(max-width:420px){.topbar-row{align-items:center}}
+
+
+/* Ver.7.2: 曲詳細内のYouTube埋め込み */
+.youtube-player-wrap {
+  margin: 12px 0 18px;
+  padding: 12px;
+  border: 1px solid var(--line, #d9dee8);
+  border-radius: 16px;
+  background: #f7f8fb;
+}
+.youtube-frame-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #000;
+}
+.youtube-frame-box iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+.youtube-player-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.button-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  min-height: 42px;
+  padding: 8px 14px;
+  border-radius: 12px;
+}
+.video-help { margin: 8px 2px 0; font-size: 12px; }
+#songViewDialog .detail-card { max-height: min(90vh, 900px); overflow-y: auto; }

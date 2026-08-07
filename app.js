@@ -429,7 +429,8 @@ function openSong(id) {
   $('viewSongLyrics').style.fontSize = `${lyricsFontSize}px`;
   $('viewSongMemo').textContent = currentSong.memo || '';
   $('youtubeBtn').classList.toggle('hidden', !currentSong.link);
-  $('youtubeBtn').textContent = '▶ 登録済み動画を再生';
+  $('youtubeBtn').textContent = '▶ 動画をここで再生';
+  closeEmbeddedYoutube();
   $('favoriteBtn').textContent = favorites.has(id) ? '♥ お気に入り済み' : '♡ お気に入り';
   $('songViewDialog').showModal();
 }
@@ -440,11 +441,51 @@ $('favoriteBtn').addEventListener('click', () => {
   $('favoriteBtn').textContent = favorites.has(currentSong.id) ? '♥ お気に入り済み' : '♡ お気に入り';
 });
 
+function getYoutubeVideoId(url) {
+  if (!url) return '';
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, '');
+    if (host === 'youtu.be') return parsed.pathname.split('/').filter(Boolean)[0] || '';
+    if (host.endsWith('youtube.com')) {
+      if (parsed.pathname === '/watch') return parsed.searchParams.get('v') || '';
+      const parts = parsed.pathname.split('/').filter(Boolean);
+      if (['embed', 'shorts', 'live'].includes(parts[0])) return parts[1] || '';
+    }
+  } catch (_) {}
+  const match = String(url).match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/))([A-Za-z0-9_-]{6,})/);
+  return match?.[1] || '';
+}
+
+function closeEmbeddedYoutube() {
+  const wrap = $('youtubePlayerWrap');
+  const frame = $('youtubePlayer');
+  if (frame) frame.removeAttribute('src');
+  if (wrap) wrap.classList.add('hidden');
+}
+
 $('youtubeBtn').addEventListener('click', () => {
   if (!currentSong?.link) return;
-  window.open(currentSong.link, '_blank', 'noopener');
+  const videoId = getYoutubeVideoId(currentSong.link);
+  $('openYoutubeExternally').href = currentSong.link;
+  if (!videoId) {
+    window.open(currentSong.link, '_blank', 'noopener');
+    return;
+  }
+  $('youtubePlayer').src = `https://www.youtube-nocookie.com/embed/${videoId}?playsinline=1&rel=0`;
+  $('youtubePlayerWrap').classList.remove('hidden');
+  $('youtubeBtn').textContent = '▶ 動画を再読み込み';
+  $('youtubePlayerWrap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });
 
+$('closeYoutubePlayerBtn').addEventListener('click', () => {
+  closeEmbeddedYoutube();
+  $('youtubeBtn').textContent = '▶ 動画をここで再生';
+});
+
+
+
+$('songViewDialog').addEventListener('close', closeEmbeddedYoutube);
 
 $('editSongBtn').addEventListener('click', () => {
   if (!currentSong) return;

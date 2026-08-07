@@ -122,11 +122,21 @@
       <div class="dialog-head"><div><h2 id="viewSongTitle"></h2><p id="viewSongMeta" class="muted"></p></div><button type="button" class="icon-btn close-dialog">×</button></div>
       <div class="detail-actions wrap-actions">
         <button id="favoriteBtn" class="ghost">♡ お気に入り</button>
-        <button id="youtubeBtn" class="primary hidden">▶ 登録済み動画を再生</button>
+        <button id="youtubeBtn" class="primary hidden">▶ 動画をここで再生</button>
         <button id="editSongBtn" class="ghost admin-only">編集</button>
         <button id="fontDownBtn" class="ghost" aria-label="文字を小さく">A−</button>
         <button id="fontUpBtn" class="ghost" aria-label="文字を大きく">A＋</button>
       </div>
+      <section id="youtubePlayerWrap" class="youtube-player-wrap hidden" aria-label="YouTube動画">
+        <div class="youtube-frame-box">
+          <iframe id="youtubePlayer" title="登録済みYouTube動画" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <div class="youtube-player-actions">
+          <button id="closeYoutubePlayerBtn" type="button" class="ghost">動画を閉じる</button>
+          <a id="openYoutubeExternally" class="button-link ghost" target="_blank" rel="noopener">YouTubeで開く</a>
+        </div>
+        <p class="muted video-help">動画を再生したまま、下の歌詞をスクロールできます。</p>
+      </section>
       <pre id="viewSongLyrics" class="lyrics"></pre>
       <p id="viewSongMemo"></p>
     </article>
