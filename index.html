@@ -52,7 +52,7 @@
           <div class="stats-grid">
             <button id="homeSongsLink" class="stat-card stat-link" type="button"><strong id="songCount">0</strong><span>登録曲</span></button>
             <button id="homeLivesLink" class="stat-card stat-link" type="button"><strong id="liveCount">0</strong><span>ライブ</span></button>
-            <div class="stat-card"><strong id="favoriteCount">0</strong><span>お気に入り</span></div>
+            <button id="homeFavoritesLink" class="stat-card stat-link" type="button"><strong id="favoriteCount">0</strong><span>お気に入り</span></button>
           </div>
         </section>
 
@@ -158,7 +158,12 @@
 
   <dialog id="liveViewDialog"><article class="detail-card"><div class="dialog-head"><div><h2 id="viewLiveTitle"></h2><p id="viewLiveMeta" class="muted"></p></div><button type="button" class="icon-btn close-dialog">×</button></div><button id="editLiveBtn" class="ghost admin-only">編集</button><h3>セットリスト</h3><div id="viewLiveSetlist" class="setlist"></div><p id="viewLiveMemo"></p></article></dialog>
 
+  <script>
+    document.getElementById('homeFavoritesLink')?.addEventListener('click', () => {
+      document.querySelector('.bottom-nav button[data-tab="favoritesTab"]')?.click();
+    });
+  </script>
   <script type="module" src="app.js"></script>
-  <footer class="app-version">Ver.7.1.4 家族閲覧レイアウト修正版</footer>
+  <footer class="app-version">Ver.7.2.3 ホームお気に入りリンク対応</footer>
 </body>
 </html>
