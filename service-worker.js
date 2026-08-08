@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ck-family-songs-v7-2-4-bottom-nav-fix';
+const CACHE_NAME = 'ck-family-songs-v7-2-5-sticky-video';
 const APP_FILES = [
   './',
   './index.html',

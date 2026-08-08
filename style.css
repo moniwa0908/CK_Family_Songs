@@ -135,3 +135,48 @@ body {
     bottom: 0 !important;
   }
 }
+
+
+/* Ver.7.2.5: 歌詞スクロール中もYouTube動画を上部に固定 */
+#songViewDialog .youtube-player-wrap:not(.hidden) {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--card, #ffffff);
+  padding-top: 6px;
+  padding-bottom: 8px;
+  margin-top: 8px;
+  box-shadow: 0 8px 18px rgba(0,0,0,.10);
+}
+
+#songViewDialog .youtube-frame-box {
+  width: 100%;
+  max-height: 32vh;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+#songViewDialog .youtube-frame-box iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 32vh;
+  border: 0;
+}
+
+#songViewDialog .youtube-player-actions,
+#songViewDialog .video-help {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+/* iPhoneの縦画面では動画を少し小さくして歌詞表示領域を確保 */
+@media (max-width: 600px) {
+  #songViewDialog .youtube-player-wrap:not(.hidden) {
+    top: 0;
+  }
+  #songViewDialog .youtube-frame-box,
+  #songViewDialog .youtube-frame-box iframe {
+    max-height: 27vh;
+  }
+}
