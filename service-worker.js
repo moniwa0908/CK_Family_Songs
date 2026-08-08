@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ck-family-songs-v7-2-3-home-favorites-link';
+const CACHE_NAME = 'ck-family-songs-v7-2-4-bottom-nav-fix';
 const APP_FILES = [
   './',
   './index.html',

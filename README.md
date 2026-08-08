@@ -1,7 +1,15 @@
-# CK Family Songs Ver.7.2.3
+# CK Family Songs Ver.7.2.4
 
-変更点はホーム画面の「お気に入り」カードのみです。
+下部タブ位置のみの修正版です。
 
-- ホームの「お気に入り」カード全体をタップすると、お気に入りタブへ移動します。
-- Firebase、Firestore、曲、歌詞、ライブ、YouTube周りは変更していません。
-- GitHubへ上書きするのは `index.html` と `service-worker.js` の2ファイルだけです。
+- ホーム
+- 曲一覧
+- ライブ
+- お気に入り
+
+上記4画面すべてで、下部タブをiPhone画面の最下部に固定します。
+Firebase・Firestore・曲・歌詞・ライブ・YouTubeの処理には変更ありません。
+
+GitHubへ上書きするファイル:
+- style.css
+- service-worker.js
