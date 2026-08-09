@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ck-family-songs-v7-2-7-compact-colorful-lives';
+const CACHE_NAME = 'ck-family-songs-v7-2-8-balanced-live-cards';
 const APP_FILES = [
   './',
   './index.html',

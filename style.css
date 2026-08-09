@@ -234,3 +234,33 @@ body {
     font-size: 0.8rem;
   }
 }
+
+
+/* Ver.7.2.8: ホームのライブカード内を上下中央にバランスよく配置 */
+#homeTab .compact-live-card {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 18px 28px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+
+#homeTab .compact-live-card .eyebrow {
+  margin: 0 0 8px !important;
+}
+
+#homeTab .compact-live-card h2 {
+  margin: 0 0 8px !important;
+}
+
+#homeTab .compact-live-card .muted {
+  margin: 0 !important;
+}
+
+@media (max-width: 600px) {
+  #homeTab .compact-live-card {
+    padding: 18px 16px !important;
+  }
+}
