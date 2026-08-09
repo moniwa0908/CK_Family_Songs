@@ -180,3 +180,57 @@ body {
     max-height: 27vh;
   }
 }
+
+
+/* Ver.7.2.7: ホームのライブ表示をコンパクト化 */
+#homeTab .compact-live-card {
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border-radius: 16px;
+}
+#homeTab .compact-live-card .eyebrow {
+  margin: 0 0 4px;
+  font-size: 0.72rem;
+  letter-spacing: .08em;
+}
+#homeTab .compact-live-card h2 {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  line-height: 1.3;
+}
+#homeTab .compact-live-card p {
+  margin-top: 2px;
+  margin-bottom: 0;
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
+/* 次に行くライブだけ色を変えて目立たせる */
+#homeTab .attending-live-card {
+  background: linear-gradient(135deg, #fff0f6 0%, #fff7e6 55%, #eef7ff 100%);
+  border: 2px solid #ff8bb7;
+  box-shadow: 0 6px 16px rgba(255, 120, 160, .16);
+}
+#homeTab .attending-live-card .eyebrow {
+  color: #d63384;
+  font-weight: 800;
+}
+#homeTab .attending-live-card h2 {
+  color: #7a1f4d;
+}
+#homeTab .attending-live-card .muted {
+  color: #67475a;
+}
+
+@media (max-width: 600px) {
+  #homeTab .compact-live-card {
+    padding: 12px 14px;
+    margin-bottom: 8px;
+  }
+  #homeTab .compact-live-card h2 {
+    font-size: 1rem;
+  }
+  #homeTab .compact-live-card p {
+    font-size: 0.8rem;
+  }
+}

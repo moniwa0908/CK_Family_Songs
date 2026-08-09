@@ -1,9 +1,13 @@
-# CK Family Songs Ver.7.2.6
+# CK Family Songs Ver.7.2.7
 
-ホームのライブ表示を2段にしました。
+ホーム画面のライブ表示のみ調整した版です。
 
-- 「NEXT LIVE」: 参加予定に関係なく、C&Kの次に開催されるライブ
-- 「次に行くライブ」: 「参加予定」にチェックした中で次のライブ
+- NEXT LIVE と「次に行くライブ」のカードをコンパクト化
+- 余白・文字サイズを少し縮小
+- 「次に行くライブ」だけピンク～オレンジ～ブルー系のグラデーションで強調
+- Firebase、Firestore、ライブデータ、曲、歌詞、YouTube処理は変更なし
 
-Firebase・Firestoreのデータ構造は変更していません。
-GitHubへ上書きするのは index.html / app.js / service-worker.js の3ファイルです。
+GitHubへ上書きするファイル:
+- index.html
+- style.css
+- service-worker.js
