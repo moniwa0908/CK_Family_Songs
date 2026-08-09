@@ -407,9 +407,18 @@ function renderLives() {
   $('liveList').querySelectorAll('[data-live]').forEach(button => {
     button.addEventListener('click', () => openLive(button.dataset.live));
   });
-  const next = ordered.find(live => live.attending && live.date >= today) || ordered.find(live => live.date >= today);
-  $('nextLiveTitle').textContent = next ? next.title : '今後のライブ予定はありません';
-  $('nextLiveMeta').textContent = next ? `${formatDate(next.date)} ${next.time || ''} ${next.venue || ''}`.trim() : '';
+  const nextOverall = ordered.find(live => live.date >= today);
+  const nextAttending = ordered.find(live => live.attending && live.date >= today);
+
+  // NEXT LIVE は参加予定に関係なく、C&Kの直近公演を表示
+  $('nextLiveTitle').textContent = nextOverall ? nextOverall.title : '今後のライブ予定はありません';
+  $('nextLiveMeta').textContent = nextOverall ? `${formatDate(nextOverall.date)} ${nextOverall.time || ''} ${nextOverall.venue || ''}`.trim() : '';
+
+  // その下には、自分が「参加予定」にした次の公演を別枠で表示
+  if ($('nextAttendingLiveTitle')) {
+    $('nextAttendingLiveTitle').textContent = nextAttending ? nextAttending.title : '参加予定のライブはありません';
+    $('nextAttendingLiveMeta').textContent = nextAttending ? `${formatDate(nextAttending.date)} ${nextAttending.time || ''} ${nextAttending.venue || ''}`.trim() : '';
+  }
 }
 
 function renderHome() {
