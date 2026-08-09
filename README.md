@@ -1,14 +1,228 @@
-# CK Family Songs Ver.7.3.2
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#111827" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>CK Family Songs</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="stylesheet" href="style.css?v=733" />
+</head>
+<body>
+  <div id="app">
+    <section id="loginView" class="auth-shell">
+      <div class="auth-card">
+        <div class="brand-mark">C&K</div>
+        <h1>CK Family Songs</h1>
+        <p class="muted">家族で見る、曲・歌詞・ライブ予定</p>
+        <form id="familyLoginForm">
+          <label>家族用の合言葉
+            <input id="familyPassphrase" type="text" inputmode="text" lang="ja" autocapitalize="none" autocomplete="off" required>
+          </label>
+          <button class="primary full-button" type="submit">アプリを開く</button>
+        </form>
+        <p id="loginError" class="error"></p>
+        <button id="showAdminLoginBtn" class="text-button" type="button">管理者としてログイン</button>
+      </div>
+    </section>
 
-ホームにC&K公式NEWSの最新3件を表示する版です。
+    <section id="mainView" class="hidden">
+      <div id="dataError" class="error-banner hidden"></div>
+      <header class="topbar">
+        <div class="topbar-row">
+          <div>
+            <button id="appTitleAccess" class="app-title-button" type="button" aria-label="CK Family Songs">CK Family Songs</button>
+            <div id="roleBadge" class="role-badge hidden"></div>
+          </div>
+          <div class="top-actions"><button id="logoutBtn" class="ghost hidden">ログアウト</button></div>
+        </div>
+        <div id="viewerToolsHost" class="viewer-tools-host hidden"></div>
+      </header>
 
-- 日付＋記事タイトルのみ表示
-- 記事をタップするとC&K公式サイトの記事を開く
-- 「すべて見る」で公式NEWS一覧へ
-- 記事本文や画像は転載しません
-- Firebase / Firestore / 曲 / 歌詞 / ライブ / YouTube処理は変更していません
+      <main>
+        <section id="homeTab" class="tab-page active">
+          <div class="hero-card compact-live-card next-general-live home-live-link" id="nextOverallLiveCard" role="button" tabindex="0" aria-label="次のライブ詳細を開く">
+            <p class="eyebrow">NEXT LIVE</p>
+            <h2 id="nextLiveTitle">予定を読み込み中…</h2>
+            <p id="nextLiveMeta" class="muted"></p>
+          </div>
+          <div class="hero-card compact-live-card attending-live-card home-live-link" id="nextAttendingLiveCard" role="button" tabindex="0" aria-label="次に行くライブの詳細を開く">
+            <p class="eyebrow">次に行くライブ</p>
+            <h2 id="nextAttendingLiveTitle">予定を読み込み中…</h2>
+            <p id="nextAttendingLiveMeta" class="muted"></p>
+          </div>
 
-GitHubへ上書き:
-- index.html
-- style.css
-- service-worker.js
+          <section class="home-news-card" aria-labelledby="homeNewsHeading">
+            <div class="home-news-head">
+              <h2 id="homeNewsHeading">C&amp;K NEWS</h2>
+              <a href="https://c-and-k.info/contents/news" target="_blank" rel="noopener">すべて見る</a>
+            </div>
+            <div class="home-news-list">
+              <div id="homeNewsList" class="home-news-dynamic">
+                <div class="home-news-loading">最新NEWSを確認中…</div>
+              </div>
+            </div>
+          </section>
+
+          <div class="stats-grid">
+            <button id="homeSongsLink" class="stat-card stat-link" type="button"><strong id="songCount">0</strong><span>登録曲</span></button>
+            <button id="homeLivesLink" class="stat-card stat-link" type="button"><strong id="liveCount">0</strong><span>ライブ</span></button>
+            <button id="homeFavoritesLink" class="stat-card stat-link" type="button"><strong id="favoriteCount">0</strong><span>お気に入り</span></button>
+          </div>
+        </section>
+
+        <section id="songsTab" class="tab-page">
+          <div class="toolbar song-toolbar sticky-tools">
+            <div class="song-search-row">
+              <input id="songSearch" type="search" placeholder="曲名・ふりがな・アルバム・歌詞を検索" />
+              <button id="familySongSearchBtn" class="search-action-button" type="button" aria-label="曲を検索">検索</button>
+            </div>
+            <button id="seedSongsBtn" class="ghost admin-only">初期曲名を一括登録</button>
+            <button id="cleanupSongsBtn" class="ghost admin-only">曲データを整える</button>
+            <button id="addSongBtn" class="primary admin-only">＋ 曲を追加</button>
+          </div>
+          <div id="songResultCount" class="filter-summary muted"></div>
+          <div id="songList" class="card-list"></div>
+        </section>
+
+        <section id="livesTab" class="tab-page">
+          <div class="toolbar live-toolbar sticky-tools">
+            <select id="liveFilter"><option value="all">すべて</option><option value="upcoming">今後</option><option value="past">過去</option><option value="attending">参加予定</option></select>
+            <button id="seedLivesBtn" class="ghost admin-only">ライブ予定を一括登録</button>
+            <button id="addLiveBtn" class="primary admin-only">＋ ライブを追加</button>
+          </div>
+          <div id="liveList" class="card-list"></div>
+        </section>
+
+        <section id="favoritesTab" class="tab-page">
+          <div class="section-title"><h2>お気に入り</h2><span class="muted">この端末に保存</span></div>
+          <div id="favoriteList" class="card-list"></div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav">
+        <button data-tab="homeTab" class="active"><span>⌂</span>ホーム</button>
+        <button data-tab="songsTab"><span>♫</span>曲一覧</button>
+        <button data-tab="livesTab"><span>◷</span>ライブ</button>
+        <button data-tab="favoritesTab"><span>♡</span>お気に入り</button>
+      </nav>
+    </section>
+  </div>
+
+  <dialog id="adminLoginDialog">
+    <form id="adminLoginForm" class="dialog-form">
+      <div class="dialog-head"><h2>管理者ログイン</h2><button type="button" class="icon-btn close-dialog">×</button></div>
+      <p class="muted">曲・歌詞・ライブを編集するときだけログインします。</p>
+      <label>メールアドレス<input id="adminEmail" type="email" autocomplete="username" required></label>
+      <label>パスワード<input id="adminPassword" type="password" autocomplete="current-password" required></label>
+      <p id="adminLoginError" class="error"></p>
+      <div class="dialog-actions compact-actions"><span></span><button type="button" class="ghost close-dialog">キャンセル</button><button type="submit" class="primary">ログイン</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="songDialog">
+    <form id="songForm" class="dialog-form">
+      <div class="dialog-head"><h2 id="songDialogTitle">曲を追加</h2><button type="button" class="icon-btn close-dialog">×</button></div>
+      <input id="songId" type="hidden">
+      <label>曲名<input id="songTitle" required></label>
+      <label>ふりがな<input id="songReading" placeholder="英字タイトルなど、読み順を指定するときに入力"></label>
+      <div class="two-col"><label>アルバム<input id="songAlbum"></label><label>発売日<input id="songRelease" type="date"></label></div>
+      <label>歌詞<textarea id="songLyrics" rows="14" placeholder="ここに歌詞を貼り付けます"></textarea></label>
+      <label>メモ<textarea id="songMemo" rows="3"></textarea></label>
+      <label>YouTube・公式動画URL<input id="songLink" type="url" placeholder="https://youtu.be/..."></label>
+      <div class="dialog-actions"><button type="button" id="deleteSongBtn" class="danger hidden">削除</button><span></span><button type="button" class="ghost close-dialog">キャンセル</button><button type="submit" class="primary">保存</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="songViewDialog">
+    <article class="detail-card">
+      <div class="dialog-head"><div><h2 id="viewSongTitle"></h2><p id="viewSongMeta" class="muted"></p></div><button type="button" class="icon-btn close-dialog">×</button></div>
+      <div class="detail-actions wrap-actions">
+        <button id="favoriteBtn" class="ghost">♡ お気に入り</button>
+        <button id="youtubeBtn" class="primary hidden">▶ 動画をここで再生</button>
+        <button id="editSongBtn" class="ghost admin-only">編集</button>
+        <button id="fontDownBtn" class="ghost" aria-label="文字を小さく">A−</button>
+        <button id="fontUpBtn" class="ghost" aria-label="文字を大きく">A＋</button>
+      </div>
+      <section id="youtubePlayerWrap" class="youtube-player-wrap hidden" aria-label="YouTube動画">
+        <div class="youtube-frame-box">
+          <iframe id="youtubePlayer" title="登録済みYouTube動画" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <div class="youtube-player-actions">
+          <button id="closeYoutubePlayerBtn" type="button" class="ghost">動画を閉じる</button>
+          <a id="openYoutubeExternally" class="button-link ghost" target="_blank" rel="noopener">YouTubeで開く</a>
+        </div>
+        <p class="muted video-help">動画を再生したまま、下の歌詞をスクロールできます。</p>
+      </section>
+      <pre id="viewSongLyrics" class="lyrics"></pre>
+      <p id="viewSongMemo"></p>
+    </article>
+  </dialog>
+
+  <dialog id="liveDialog">
+    <form id="liveForm" class="dialog-form">
+      <div class="dialog-head"><h2 id="liveDialogTitle">ライブを追加</h2><button type="button" class="icon-btn close-dialog">×</button></div>
+      <input id="liveId" type="hidden">
+      <label>公演名<input id="liveTitle" required></label>
+      <div class="two-col"><label>開催日<input id="liveDate" type="date" required></label><label>開演時刻<input id="liveTime" type="time"></label></div>
+      <label>会場<input id="liveVenue"></label>
+      <label>座席・チケット情報<input id="liveSeat"></label>
+      <label class="check-label"><input id="liveAttending" type="checkbox"> 今後行く予定として強調表示する</label>
+      <label>セットリスト<textarea id="liveSetlist" rows="10" placeholder="1曲ごとに改行"></textarea></label>
+      <label>メモ<textarea id="liveMemo" rows="4"></textarea></label>
+      <div class="dialog-actions"><button type="button" id="deleteLiveBtn" class="danger hidden">削除</button><span></span><button type="button" class="ghost close-dialog">キャンセル</button><button type="submit" class="primary">保存</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="liveViewDialog"><article class="detail-card"><div class="dialog-head"><div><h2 id="viewLiveTitle"></h2><p id="viewLiveMeta" class="muted"></p></div><button type="button" class="icon-btn close-dialog">×</button></div><button id="editLiveBtn" class="ghost admin-only">編集</button><h3>セットリスト</h3><div id="viewLiveSetlist" class="setlist"></div><p id="viewLiveMemo"></p></article></dialog>
+
+  <script>
+    document.getElementById('homeFavoritesLink')?.addEventListener('click', () => {
+      document.querySelector('.bottom-nav button[data-tab="favoritesTab"]')?.click();
+    });
+  </script>
+  <script>
+    document.getElementById('familySongSearchBtn')?.addEventListener('click', () => {
+      const input = document.getElementById('songSearch');
+      if (!input) return;
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => input.focus(), 250);
+    });
+  </script>
+  <script>
+    const escapeNewsHtml = (value) => String(value ?? '').replace(/[&<>"']/g, ch => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[ch]);
+
+    async function loadOfficialNews() {
+      const host = document.getElementById('homeNewsList');
+      if (!host) return;
+      try {
+        const response = await fetch('./news.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error(`news.json ${response.status}`);
+        const data = await response.json();
+        const items = Array.isArray(data.items) ? data.items.slice(0, 3) : [];
+        if (!items.length) throw new Error('no news items');
+        host.innerHTML = items.map(item => {
+          const shortDate = String(item.date || '').replace(/^20\d{2}[.\-/]/, '').replace(/[.\-]/g, '/');
+          return `<a class="home-news-item" href="${escapeNewsHtml(item.url)}" target="_blank" rel="noopener">
+            <time>${escapeNewsHtml(shortDate)}</time>
+            <span>${escapeNewsHtml(item.title)}</span>
+          </a>`;
+        }).join('');
+      } catch (error) {
+        console.error('C&K NEWS load failed:', error);
+        host.innerHTML = `<a class="home-news-item home-news-fallback" href="https://c-and-k.info/contents/news" target="_blank" rel="noopener">
+          <time>NEWS</time><span>公式NEWSを見る</span>
+        </a>`;
+      }
+    }
+    loadOfficialNews();
+  </script>
+  <script type="module" src="app.js"></script>
+  <footer class="app-version">Ver.7.3.3 C&K NEWS自動更新対応</footer>
+</body>
+</html>
