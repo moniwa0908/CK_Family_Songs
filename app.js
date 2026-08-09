@@ -419,6 +419,31 @@ function renderLives() {
     $('nextAttendingLiveTitle').textContent = nextAttending ? nextAttending.title : '参加予定のライブはありません';
     $('nextAttendingLiveMeta').textContent = nextAttending ? `${formatDate(nextAttending.date)} ${nextAttending.time || ''} ${nextAttending.venue || ''}`.trim() : '';
   }
+
+  // ホームのライブカードから、その公演の詳細画面を直接開く
+  const overallCard = $('nextOverallLiveCard');
+  if (overallCard) {
+    overallCard.classList.toggle('is-disabled', !nextOverall);
+    overallCard.onclick = nextOverall ? () => openLive(nextOverall.id) : null;
+    overallCard.onkeydown = nextOverall ? (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openLive(nextOverall.id);
+      }
+    } : null;
+  }
+
+  const attendingCard = $('nextAttendingLiveCard');
+  if (attendingCard) {
+    attendingCard.classList.toggle('is-disabled', !nextAttending);
+    attendingCard.onclick = nextAttending ? () => openLive(nextAttending.id) : null;
+    attendingCard.onkeydown = nextAttending ? (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openLive(nextAttending.id);
+      }
+    } : null;
+  }
 }
 
 function renderHome() {

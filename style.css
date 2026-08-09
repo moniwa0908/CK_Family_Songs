@@ -336,3 +336,19 @@ body #app #mainView #homeTab .hero-card.compact-live-card > .muted {
     padding: 0 12px;
   }
 }
+
+
+/* Ver.7.3.1: ホームのライブカードを詳細画面へのリンクとして操作可能に */
+#homeTab .home-live-link {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+#homeTab .home-live-link:active {
+  transform: scale(.992);
+}
+#homeTab .home-live-link.is-disabled {
+  cursor: default;
+}
+#homeTab .home-live-link.is-disabled:active {
+  transform: none;
+}

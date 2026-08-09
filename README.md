@@ -1,12 +1,14 @@
-# CK Family Songs Ver.7.3.0
+# CK Family Songs Ver.7.3.1
 
-家族閲覧モードの曲一覧で検索が分かりやすいように、検索欄の右側へ「検索」ボタンを追加しました。
+ホーム画面のライブカードから詳細画面を直接開けるようにしました。
 
-- 「検索」を押すと検索欄へ移動して入力状態になります
-- 管理者モードの既存機能は変更していません
-- Firebase / Firestore / 曲 / 歌詞 / ライブ / YouTube処理は変更していません
+- NEXT LIVE をタップ → その公演の詳細画面
+- 次に行くライブをタップ → その公演の詳細画面
+- ライブ予定がないカードはタップ無効
+- Firebase / Firestore / 登録済みデータは変更なし
 
 GitHubへ上書き:
 - index.html
+- app.js
 - style.css
 - service-worker.js
