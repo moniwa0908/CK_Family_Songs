@@ -1,12 +1,10 @@
-# CK Family Songs Ver.7.2.9
+# CK Family Songs Ver.7.3.0
 
-Ver.7.2.8が反映されない場合向けの強制反映版です。
+家族閲覧モードの曲一覧で検索が分かりやすいように、検索欄の右側へ「検索」ボタンを追加しました。
 
-- 旧 `.hero-card` の `min-height:170px` と `justify-content:end` を強い指定で上書き
-- ライブカードの文字を上下中央へ
-- カード高さを約112〜118pxまで縮小
-- `style.css?v=729` として読み込み、iPhoneの古いCSSキャッシュを回避
-- Service Workerのキャッシュ名も更新
+- 「検索」を押すと検索欄へ移動して入力状態になります
+- 管理者モードの既存機能は変更していません
+- Firebase / Firestore / 曲 / 歌詞 / ライブ / YouTube処理は変更していません
 
 GitHubへ上書き:
 - index.html

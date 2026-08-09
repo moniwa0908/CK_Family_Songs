@@ -297,3 +297,42 @@ body #app #mainView #homeTab .hero-card.compact-live-card > .muted {
     padding: 13px 16px !important;
   }
 }
+
+
+/* Ver.7.3.0: 曲一覧に明示的な検索ボタンを追加 */
+.song-search-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  width: 100%;
+  align-items: center;
+}
+
+.song-search-row #songSearch {
+  width: 100%;
+  min-width: 0;
+}
+
+.search-action-button {
+  min-width: 68px;
+  height: 46px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 14px;
+  background: #111827;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.search-action-button:active {
+  transform: scale(.98);
+}
+
+@media (max-width: 600px) {
+  .search-action-button {
+    min-width: 62px;
+    height: 44px;
+    padding: 0 12px;
+  }
+}

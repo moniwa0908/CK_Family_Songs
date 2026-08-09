@@ -1,8 +1,8 @@
-const CACHE_NAME = 'ck-family-songs-v7-2-9-force-live-layout';
+const CACHE_NAME = 'ck-family-songs-v7-3-0-family-search-button';
 const APP_FILES = [
   './',
   './index.html',
-  './style.css?v=729',
+  './style.css?v=730',
   './app.js',
   './song-seed.js',
   './song-cleanup.js',

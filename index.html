@@ -9,7 +9,7 @@
   <title>CK Family Songs</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon.svg" />
-  <link rel="stylesheet" href="style.css?v=729" />
+  <link rel="stylesheet" href="style.css?v=730" />
 </head>
 <body>
   <div id="app">
@@ -63,7 +63,10 @@
 
         <section id="songsTab" class="tab-page">
           <div class="toolbar song-toolbar sticky-tools">
-            <input id="songSearch" type="search" placeholder="曲名・ふりがな・アルバム・歌詞を検索" />
+            <div class="song-search-row">
+              <input id="songSearch" type="search" placeholder="曲名・ふりがな・アルバム・歌詞を検索" />
+              <button id="familySongSearchBtn" class="search-action-button" type="button" aria-label="曲を検索">検索</button>
+            </div>
             <button id="seedSongsBtn" class="ghost admin-only">初期曲名を一括登録</button>
             <button id="cleanupSongsBtn" class="ghost admin-only">曲データを整える</button>
             <button id="addSongBtn" class="primary admin-only">＋ 曲を追加</button>
@@ -168,7 +171,15 @@
       document.querySelector('.bottom-nav button[data-tab="favoritesTab"]')?.click();
     });
   </script>
+  <script>
+    document.getElementById('familySongSearchBtn')?.addEventListener('click', () => {
+      const input = document.getElementById('songSearch');
+      if (!input) return;
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => input.focus(), 250);
+    });
+  </script>
   <script type="module" src="app.js"></script>
-  <footer class="app-version">Ver.7.2.9 ライブカード強制配置版</footer>
+  <footer class="app-version">Ver.7.3.0 家族モード検索ボタン対応</footer>
 </body>
 </html>
