@@ -1,8 +1,8 @@
-const CACHE_NAME = 'ck-family-songs-v7-2-8-balanced-live-cards';
+const CACHE_NAME = 'ck-family-songs-v7-2-9-force-live-layout';
 const APP_FILES = [
   './',
   './index.html',
-  './style.css',
+  './style.css?v=729',
   './app.js',
   './song-seed.js',
   './song-cleanup.js',

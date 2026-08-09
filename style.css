@@ -264,3 +264,36 @@ body {
     padding: 18px 16px !important;
   }
 }
+
+
+/* Ver.7.2.9: ライブカードの旧min-height/下寄せ指定を完全に打ち消す */
+body #app #mainView #homeTab .hero-card.compact-live-card {
+  min-height: 118px !important;
+  height: auto !important;
+  padding: 14px 18px !important;
+  justify-content: center !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+}
+
+body #app #mainView #homeTab .hero-card.compact-live-card > .eyebrow {
+  margin: 0 0 6px 0 !important;
+  padding: 0 !important;
+}
+
+body #app #mainView #homeTab .hero-card.compact-live-card > h2 {
+  margin: 0 0 6px 0 !important;
+  padding: 0 !important;
+}
+
+body #app #mainView #homeTab .hero-card.compact-live-card > .muted {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+@media (max-width: 600px) {
+  body #app #mainView #homeTab .hero-card.compact-live-card {
+    min-height: 112px !important;
+    padding: 13px 16px !important;
+  }
+}
