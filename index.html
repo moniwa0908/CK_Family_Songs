@@ -9,7 +9,7 @@
   <title>CK Family Songs</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon.svg" />
-  <link rel="stylesheet" href="style.css?v=731" />
+  <link rel="stylesheet" href="style.css?v=732" />
 </head>
 <body>
   <div id="app">
@@ -54,6 +54,28 @@
             <h2 id="nextAttendingLiveTitle">予定を読み込み中…</h2>
             <p id="nextAttendingLiveMeta" class="muted"></p>
           </div>
+
+          <section class="home-news-card" aria-labelledby="homeNewsHeading">
+            <div class="home-news-head">
+              <h2 id="homeNewsHeading">C&amp;K NEWS</h2>
+              <a href="https://c-and-k.info/contents/news" target="_blank" rel="noopener">すべて見る</a>
+            </div>
+            <div class="home-news-list">
+              <a class="home-news-item" href="https://c-and-k.info/contents/1096088" target="_blank" rel="noopener">
+                <time datetime="2026-08-08">8/8</time>
+                <span>知床公演グッズ先行時間変更あり｜北海道ツアー グッズ販売のお知らせ</span>
+              </a>
+              <a class="home-news-item" href="https://c-and-k.info/contents/1099345" target="_blank" rel="noopener">
+                <time datetime="2026-08-08">8/8</time>
+                <span>【YouTube公開】C&amp;K魅力を3分にまとめた「3分で沼る編」映像を公開！</span>
+              </a>
+              <a class="home-news-item" href="https://c-and-k.info/contents/1098136" target="_blank" rel="noopener">
+                <time datetime="2026-08-04">8/4</time>
+                <span>10/18「SORAON 2026 Autumn」にC&amp;K出演決定！</span>
+              </a>
+            </div>
+          </section>
+
           <div class="stats-grid">
             <button id="homeSongsLink" class="stat-card stat-link" type="button"><strong id="songCount">0</strong><span>登録曲</span></button>
             <button id="homeLivesLink" class="stat-card stat-link" type="button"><strong id="liveCount">0</strong><span>ライブ</span></button>
@@ -180,6 +202,6 @@
     });
   </script>
   <script type="module" src="app.js"></script>
-  <footer class="app-version">Ver.7.3.1 ホームライブ詳細リンク対応</footer>
+  <footer class="app-version">Ver.7.3.2 C&K NEWS表示対応</footer>
 </body>
 </html>

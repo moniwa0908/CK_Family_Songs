@@ -352,3 +352,65 @@ body #app #mainView #homeTab .hero-card.compact-live-card > .muted {
 #homeTab .home-live-link.is-disabled:active {
   transform: none;
 }
+
+
+/* Ver.7.3.2: ホームに公式C&K NEWSをコンパクト表示 */
+.home-news-card {
+  margin: 10px 0 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, .08);
+  box-shadow: 0 4px 14px rgba(17, 24, 39, .06);
+}
+.home-news-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.home-news-head h2 {
+  margin: 0;
+  font-size: .95rem;
+  letter-spacing: .03em;
+}
+.home-news-head a {
+  font-size: .78rem;
+  text-decoration: none;
+  font-weight: 700;
+}
+.home-news-list {
+  display: grid;
+}
+.home-news-item {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+  padding: 8px 0;
+  color: inherit;
+  text-decoration: none;
+  border-top: 1px solid rgba(17, 24, 39, .07);
+}
+.home-news-item:first-child {
+  border-top: 0;
+}
+.home-news-item time {
+  font-size: .78rem;
+  font-weight: 800;
+  opacity: .62;
+  line-height: 1.45;
+}
+.home-news-item span {
+  font-size: .84rem;
+  line-height: 1.4;
+  font-weight: 650;
+}
+.home-news-item:active {
+  opacity: .65;
+}
+@media (max-width: 600px) {
+  .home-news-card { padding: 10px 12px; }
+  .home-news-item { padding: 7px 0; }
+}

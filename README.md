@@ -1,14 +1,14 @@
-# CK Family Songs Ver.7.3.1
+# CK Family Songs Ver.7.3.2
 
-ホーム画面のライブカードから詳細画面を直接開けるようにしました。
+ホームにC&K公式NEWSの最新3件を表示する版です。
 
-- NEXT LIVE をタップ → その公演の詳細画面
-- 次に行くライブをタップ → その公演の詳細画面
-- ライブ予定がないカードはタップ無効
-- Firebase / Firestore / 登録済みデータは変更なし
+- 日付＋記事タイトルのみ表示
+- 記事をタップするとC&K公式サイトの記事を開く
+- 「すべて見る」で公式NEWS一覧へ
+- 記事本文や画像は転載しません
+- Firebase / Firestore / 曲 / 歌詞 / ライブ / YouTube処理は変更していません
 
 GitHubへ上書き:
 - index.html
-- app.js
 - style.css
 - service-worker.js
