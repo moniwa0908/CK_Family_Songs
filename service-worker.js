@@ -1,8 +1,9 @@
-const CACHE_NAME = 'ck-family-songs-v7-3-0-family-search-button';
+const CACHE_NAME = 'ck-family-songs-v7-3-5-live-nearest-scroll';
 const APP_FILES = [
   './',
   './index.html',
-  './style.css?v=730',
+  './news.json',
+  './style.css',
   './app.js',
   './song-seed.js',
   './song-cleanup.js',
@@ -27,6 +28,7 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
+
   event.respondWith(
     fetch(event.request)
       .then(response => {
@@ -34,6 +36,17 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
         return response;
       })
-      .catch(() => caches.match(event.request).then(response => response || caches.match('./index.html')))
+      .catch(async () => {
+        const cached = await caches.match(event.request);
+        if (cached) return cached;
+
+        // HTMLナビゲーションだけindex.htmlへ戻す。
+        // CSS/JS/JSONにindex.htmlを返すとレイアウトが壊れるため返さない。
+        if (event.request.mode === 'navigate') {
+          return caches.match('./index.html');
+        }
+
+        return Response.error();
+      })
   );
 });

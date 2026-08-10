@@ -1,15 +1,16 @@
-# CK Family Songs Ver.7.3.4 CSS復旧版
+# CK Family Songs Ver.7.3.5
 
-今回の修正:
-- `style.css?v=733` をやめて `./style.css` の通常読み込みに戻しました。
-- Service Workerのキャッシュ名を更新しました。
-- CSS/JS/JSON取得失敗時に誤って `index.html` を返さないように修正しました。
-- 万一CSS読み込みが遅れても、完全な未装飾画面にならない最低限の緊急スタイルを `index.html` に追加しました。
-- C&K NEWS自動更新 (`news.json` + `.github/workflows/update-news.yml`) はそのまま維持しています。
+ライブタブを開いたときの初期位置を変更しました。
+
+- ライブボタンを押す
+- 今日以降で一番近いライブを探す
+- そのライブが画面のほぼ中央に来る位置へ自動スクロール
+- 今後のライブが1件もない場合は、一番新しい過去ライブを中央表示
+- 曲・歌詞・NEWS自動更新・Firebaseデータは変更なし
 
 GitHubへ上書き:
 - index.html
-- style.css
+- app.js
 - service-worker.js
 
-`news.json` と `.github/workflows/update-news.yml` は現在のものをそのまま残してください。
+style.css は変更していません。

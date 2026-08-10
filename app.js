@@ -659,6 +659,43 @@ $('deleteLiveBtn').addEventListener('click', async () => {
 document.querySelectorAll('.close-dialog').forEach(button => {
   button.addEventListener('click', () => button.closest('dialog').close());
 });
+
+function scrollNearestLiveToCenter() {
+  const today = getJstDateKey();
+  const ordered = [...lives]
+    .filter(live => live?.date)
+    .sort((a, b) => String(a.date).localeCompare(String(b.date)));
+
+  if (!ordered.length) {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    return;
+  }
+
+  // 今日以降で最初の公演を優先。なければ一番新しい過去公演。
+  const nearest = ordered.find(live => live.date >= today) || ordered[ordered.length - 1];
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      const buttons = [...document.querySelectorAll('#liveList [data-live]')];
+      const target = buttons.find(button => button.dataset.live === nearest.id);
+
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'auto',
+          block: 'center',
+          inline: 'nearest'
+        });
+      } else {
+        // 絞り込み等で対象が表示されていない場合はライブ一覧の先頭へ。
+        document.getElementById('liveList')?.scrollIntoView({
+          behavior: 'auto',
+          block: 'start'
+        });
+      }
+    });
+  });
+}
+
 document.querySelectorAll('.bottom-nav button').forEach(button => {
   button.addEventListener('click', () => {
     document.querySelectorAll('.bottom-nav button').forEach(item => item.classList.remove('active'));
@@ -666,8 +703,13 @@ document.querySelectorAll('.bottom-nav button').forEach(button => {
     button.classList.add('active');
     $(button.dataset.tab).classList.add('active');
     updateViewerTools();
-    // タブを切り替えたときは、検索・絞り込み欄がタイトル直下に見える位置へ戻します。
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    if (button.dataset.tab === 'livesTab') {
+      // ライブ画面は、今日に一番近い公演が画面中央に来る位置へ移動。
+      scrollNearestLiveToCenter();
+    } else {
+      // その他のタブはこれまでどおり上部から表示。
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
   });
 });
 
@@ -678,7 +720,6 @@ $('homeSongsLink')?.addEventListener('click', () => {
 
 $('homeLivesLink')?.addEventListener('click', () => {
   document.querySelector('.bottom-nav button[data-tab="livesTab"]')?.click();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
 
