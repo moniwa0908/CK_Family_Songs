@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ck-family-songs-v7-3-6-fixed-lyrics-font';
+const CACHE_NAME = 'ck-family-songs-v7-3-7-no-page-zoom';
 const APP_FILES = [
   './',
   './index.html',

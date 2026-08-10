@@ -1,11 +1,13 @@
-# CK Family Songs Ver.7.3.6
+# CK Family Songs Ver.7.3.7
 
-- 歌詞の文字サイズを常に14pxに固定
-- 保存済みの大きい文字サイズも14pxへリセット
-- A− / A+ ボタンは非表示
-- その他の機能・データは変更なし
+iPhoneでA− / A+を連打した際に、ページ全体が拡大される問題を修正しました。
+
+- A− / A+ の文字サイズ変更機能はそのまま残します
+- ボタン連打によるダブルタップズームを抑止
+- ページ全体の意図しない拡大を防止
+- 曲・歌詞・ライブ・NEWS自動更新・Firebaseデータは変更なし
 
 GitHubへ上書き:
 - index.html
-- app.js
+- style.css
 - service-worker.js

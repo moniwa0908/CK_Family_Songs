@@ -425,3 +425,30 @@ body #app #mainView #homeTab .hero-card.compact-live-card > .muted {
 .home-news-fallback {
   grid-template-columns: 50px minmax(0, 1fr);
 }
+
+
+/* Ver.7.3.7: iPhoneでA-/A+等を連打してもページ全体を拡大しない */
+html, body {
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+}
+
+button,
+input,
+select,
+textarea,
+a,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+/* 歌詞画面の操作ボタンは特にダブルタップズームを抑止 */
+#fontDownBtn,
+#fontUpBtn,
+#favoriteSongBtn,
+#playSongVideoBtn,
+#closeSongVideoBtn {
+  touch-action: manipulation !important;
+  -webkit-user-select: none;
+  user-select: none;
+}
