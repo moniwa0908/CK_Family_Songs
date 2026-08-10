@@ -122,7 +122,8 @@ function compareSongsByKana(a, b) {
 }
 
 const favorites = new Set(JSON.parse(localStorage.getItem('ck-favorites') || '[]'));
-let lyricsFontSize = Number(localStorage.getItem('ck-lyrics-font-size') || 14);
+let lyricsFontSize = 14;
+localStorage.setItem('ck-lyrics-font-size', '14');
 let auth;
 let db;
 let role = 'viewer';
@@ -472,7 +473,7 @@ function openSong(id) {
   $('viewSongMeta').textContent = [currentSong.album, currentSong.releaseDate ? formatDate(currentSong.releaseDate) : '']
     .filter(Boolean).join(' ・ ');
   $('viewSongLyrics').textContent = currentSong.lyrics || '歌詞はまだ登録されていません。';
-  $('viewSongLyrics').style.fontSize = `${lyricsFontSize}px`;
+  $('viewSongLyrics').style.fontSize = '14px';
   $('viewSongMemo').textContent = currentSong.memo || '';
   $('youtubeBtn').classList.toggle('hidden', !currentSong.link);
   $('youtubeBtn').textContent = '▶ 動画をここで再生';
@@ -874,13 +875,13 @@ $('songSearch').addEventListener('input', renderSongs);
 $('albumFilter')?.addEventListener('change', renderSongs);
 $('liveFilter').addEventListener('change', renderLives);
 
-function setLyricsFont(delta) {
-  lyricsFontSize = Math.max(14, Math.min(32, lyricsFontSize + delta));
-  localStorage.setItem('ck-lyrics-font-size', String(lyricsFontSize));
-  $('viewSongLyrics').style.fontSize = `${lyricsFontSize}px`;
+function setLyricsFont() {
+  lyricsFontSize = 14;
+  localStorage.setItem('ck-lyrics-font-size', '14');
+  if ($('viewSongLyrics')) $('viewSongLyrics').style.fontSize = '14px';
 }
-$('fontDownBtn').addEventListener('click', () => setLyricsFont(-2));
-$('fontUpBtn').addEventListener('click', () => setLyricsFont(2));
+$('fontDownBtn')?.addEventListener('click', setLyricsFont);
+$('fontUpBtn')?.addEventListener('click', setLyricsFont);
 
 
 
