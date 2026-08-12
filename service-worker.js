@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ck-family-songs-v7-3-8-font-buttons-no-zoom';
+const CACHE_NAME = 'ck-family-songs-v7-3-9-google-maps';
 const APP_FILES = [
   './',
   './index.html',

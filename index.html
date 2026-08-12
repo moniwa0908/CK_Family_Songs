@@ -199,7 +199,7 @@
     </form>
   </dialog>
 
-  <dialog id="liveViewDialog"><article class="detail-card"><div class="dialog-head"><div><h2 id="viewLiveTitle"></h2><p id="viewLiveMeta" class="muted"></p></div><button type="button" class="icon-btn close-dialog">×</button></div><button id="editLiveBtn" class="ghost admin-only">編集</button><h3>セットリスト</h3><div id="viewLiveSetlist" class="setlist"></div><p id="viewLiveMemo"></p></article></dialog>
+  <dialog id="liveViewDialog"><article class="detail-card"><div class="dialog-head"><div><h2 id="viewLiveTitle"></h2><p id="viewLiveMeta" class="muted"></p></div><button type="button" class="icon-btn close-dialog">×</button></div><div class="live-detail-actions"><a id="viewLiveMapBtn" class="map-link-button" href="#" target="_blank" rel="noopener">📍 Googleマップで見る</a><button id="editLiveBtn" class="ghost admin-only">編集</button></div><h3>セットリスト</h3><div id="viewLiveSetlist" class="setlist"></div><p id="viewLiveMemo"></p></article></dialog>
 
   <script>
     document.getElementById('homeFavoritesLink')?.addEventListener('click', () => {
@@ -245,5 +245,5 @@
     loadOfficialNews();
   </script>
   <script type="module" src="app.js"></script>
-  <footer class="app-version">Ver.7.3.8 文字変更＋画面ズーム防止版</body>
+  <footer class="app-version">Ver.7.3.9 Googleマップ対応版</body>
 </html>

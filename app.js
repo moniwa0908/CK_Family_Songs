@@ -596,6 +596,20 @@ function openLive(id) {
   if (!currentLive) return;
   $('viewLiveTitle').textContent = `${currentLive.attending ? '★ ' : ''}${currentLive.title}`;
   $('viewLiveMeta').textContent = `${formatDate(currentLive.date)} ${currentLive.time || ''} ・ ${currentLive.venue || ''}${currentLive.seat ? ` ・ ${currentLive.seat}` : ''}`;
+
+  const mapButton = $('viewLiveMapBtn');
+  if (mapButton) {
+    const venue = String(currentLive.venue || '').trim();
+    if (venue) {
+      mapButton.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue)}`;
+      mapButton.classList.remove('hidden');
+      mapButton.setAttribute('aria-label', `${venue}をGoogleマップで見る`);
+    } else {
+      mapButton.href = '#';
+      mapButton.classList.add('hidden');
+    }
+  }
+
   renderSetlist(currentLive.setlist || '');
   $('viewLiveMemo').textContent = currentLive.memo || '';
   $('liveViewDialog').showModal();
