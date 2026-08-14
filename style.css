@@ -490,3 +490,64 @@ a,
     width: 100%;
   }
 }
+
+
+/* Ver.7.4.0: ライブ一覧の「次に行くライブ」を強く強調 */
+#liveList .next-attending-live {
+  position: relative;
+  border: 3px solid #ff7aa8 !important;
+  background: linear-gradient(135deg, #fff0f6 0%, #fff8e7 52%, #eef7ff 100%) !important;
+  box-shadow: 0 10px 24px rgba(255, 92, 146, .20) !important;
+  transform: translateZ(0);
+}
+
+#liveList .next-attending-live::before {
+  content: "NEXT";
+  position: absolute;
+  top: -10px;
+  right: 14px;
+  z-index: 2;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #ff4f91;
+  color: #fff;
+  font-size: .68rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  box-shadow: 0 4px 10px rgba(255, 79, 145, .24);
+}
+
+#liveList .next-attending-live h3 {
+  color: #7a1745;
+  font-weight: 850;
+}
+
+#liveList .next-attending-live .item-meta {
+  color: #6b3d52;
+  font-weight: 650;
+}
+
+#liveList .next-attending-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff4f91, #ff9f43);
+  color: #fff;
+  font-size: .75rem;
+  font-weight: 900;
+  box-shadow: 0 3px 8px rgba(255, 92, 146, .18);
+}
+
+#liveList .next-attending-live:active {
+  transform: scale(.995);
+}
+
+@media (max-width: 600px) {
+  #liveList .next-attending-live {
+    border-width: 2.5px !important;
+  }
+  #liveList .next-attending-live::before {
+    right: 10px;
+  }
+}

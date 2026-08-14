@@ -394,11 +394,13 @@ function renderLives() {
     if (filter === 'attending') return Boolean(live.attending) && live.date >= today;
     return filter === 'upcoming' ? live.date >= today : live.date < today;
   });
+  const nextAttending = ordered.find(live => live.attending && live.date >= today);
   $('liveList').innerHTML = shown.length
     ? shown.map(live => {
         const attending = Boolean(live.attending) && live.date >= today;
-        return `<article class="item-card live-card ${attending ? 'attending-live' : ''}"><button class="card-open" data-live="${live.id}">
-        <div class="live-badges"><span class="date-chip">${live.date >= today ? '今後' : '過去'}</span>${attending ? '<span class="attending-chip">★ 参加予定</span>' : ''}</div>
+        const isNextAttending = Boolean(nextAttending && live.id === nextAttending.id);
+        return `<article class="item-card live-card ${attending ? 'attending-live' : ''} ${isNextAttending ? 'next-attending-live' : ''}"><button class="card-open" data-live="${live.id}">
+        <div class="live-badges"><span class="date-chip">${live.date >= today ? '今後' : '過去'}</span>${isNextAttending ? '<span class="next-attending-chip">★ 次に行くライブ</span>' : attending ? '<span class="attending-chip">★ 参加予定</span>' : ''}</div>
         <h3>${esc(live.title)}</h3>
         <div class="item-meta">${esc(formatDate(live.date))}${live.time ? ` ${esc(live.time)}` : ''} ・ ${esc(live.venue || '会場未設定')}</div>
       </button></article>`;
@@ -408,7 +410,6 @@ function renderLives() {
     button.addEventListener('click', () => openLive(button.dataset.live));
   });
   const nextOverall = ordered.find(live => live.date >= today);
-  const nextAttending = ordered.find(live => live.attending && live.date >= today);
 
   // NEXT LIVE は参加予定に関係なく、C&Kの直近公演を表示
   $('nextLiveTitle').textContent = nextOverall ? nextOverall.title : '今後のライブ予定はありません';

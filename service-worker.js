@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ck-family-songs-v7-3-9-google-maps';
+const CACHE_NAME = 'ck-family-songs-v7-4-0-strong-next-live';
 const APP_FILES = [
   './',
   './index.html',
