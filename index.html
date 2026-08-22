@@ -115,7 +115,7 @@
                 <p class="eyebrow">RANDOM PLAY</p>
                 <h2 id="randomPlayerHeading">YouTube ランダム連続再生</h2>
               </div>
-              <button id="randomPlayToggleBtn" class="primary" type="button">▶ 連続再生</button>
+              <button id="randomPlayToggleBtn" class="primary" type="button" disabled>準備中…</button>
             </div>
             <p id="randomNowPlaying" class="random-now-playing muted">ボタンを押すと動画登録済み曲からすぐランダム再生します。</p>
             <div id="randomPlayerWrap" class="random-video-wrap hidden">
@@ -266,6 +266,7 @@
     }
     loadOfficialNews();
   </script>
+  <script src="https://www.youtube.com/iframe_api"></script>
   <script type="module" src="app.js"></script>
-  <footer class="app-version">Ver.7.4.5 ランダム再生専用タブ版</body>
+  <footer class="app-version">Ver.7.4.6 ランダム連続再生安定版</body>
 </html>
