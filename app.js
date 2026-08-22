@@ -492,7 +492,7 @@ $('favoriteBtn').addEventListener('click', () => {
 let randomPlayer = null;
 let randomPlayActive = false;
 let randomCurrentSongId = '';
-let randomApiReady = false;
+let randomPlayerReady = false;
 
 function randomPlayableSongs() {
   return songs.filter(song => getYoutubeVideoId(song.link));
@@ -501,34 +501,57 @@ function randomPlayableSongs() {
 function chooseRandomPlayableSong() {
   const pool = randomPlayableSongs();
   if (!pool.length) return null;
-  const choices = pool.length > 1
-    ? pool.filter(song => song.id !== randomCurrentSongId)
-    : pool;
+  const choices = pool.length > 1 ? pool.filter(song => song.id !== randomCurrentSongId) : pool;
   return choices[Math.floor(Math.random() * choices.length)] || pool[0];
 }
 
-function ensureYouTubeIframeApi() {
-  if (window.YT?.Player) {
-    randomApiReady = true;
-    return Promise.resolve();
-  }
-  return new Promise(resolve => {
-    const previousReady = window.onYouTubeIframeAPIReady;
-    window.onYouTubeIframeAPIReady = () => {
-      randomApiReady = true;
-      if (typeof previousReady === 'function') previousReady();
-      resolve();
-    };
-    if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
-      const script = document.createElement('script');
-      script.src = 'https://www.youtube.com/iframe_api';
-      document.head.appendChild(script);
+function initRandomYoutubePlayer() {
+  if (randomPlayer || !window.YT?.Player) return;
+  randomPlayer = new YT.Player('randomYoutubePlayer', {
+    playerVars: { playsinline: 1, rel: 0 },
+    events: {
+      onReady: () => {
+        randomPlayerReady = true;
+        $('randomNowPlaying').textContent = '準備完了。▶ 連続再生を押してください。';
+      },
+      onStateChange: event => {
+        if (event.data === YT.PlayerState.ENDED && randomPlayActive) {
+          playNextRandomSong();
+        }
+      },
+      onError: () => {
+        if (randomPlayActive) {
+          $('randomNowPlaying').textContent = 'この動画は再生できないため、次の曲へ進みます…';
+          setTimeout(playNextRandomSong, 700);
+        }
+      }
     }
   });
 }
 
-async function playNextRandomSong() {
+function loadRandomYoutubeApiEarly() {
+  if (window.YT?.Player) {
+    initRandomYoutubePlayer();
+    return;
+  }
+  const previousReady = window.onYouTubeIframeAPIReady;
+  window.onYouTubeIframeAPIReady = () => {
+    if (typeof previousReady === 'function') previousReady();
+    initRandomYoutubePlayer();
+  };
+  if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
+    const script = document.createElement('script');
+    script.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(script);
+  }
+}
+
+function playNextRandomSong() {
   if (!randomPlayActive) return;
+  if (!randomPlayerReady || !randomPlayer) {
+    $('randomNowPlaying').textContent = 'YouTubeプレーヤーを準備中です…';
+    return;
+  }
   const song = chooseRandomPlayableSong();
   if (!song) {
     randomPlayActive = false;
@@ -536,48 +559,29 @@ async function playNextRandomSong() {
     $('randomNowPlaying').textContent = 'YouTube動画が登録されている曲がありません。';
     return;
   }
-
   const videoId = getYoutubeVideoId(song.link);
   randomCurrentSongId = song.id;
   $('randomNowPlaying').textContent = `再生中：${song.title}`;
   $('randomPlayerWrap').classList.remove('hidden');
   $('randomPlayToggleBtn').textContent = '⏸ 一時停止';
-
-  await ensureYouTubeIframeApi();
-
-  if (!randomPlayer) {
-    randomPlayer = new YT.Player('randomYoutubePlayer', {
-      videoId,
-      playerVars: {
-        autoplay: 1,
-        playsinline: 1,
-        rel: 0
-      },
-      events: {
-        onReady: event => event.target.playVideo(),
-        onStateChange: event => {
-          if (event.data === YT.PlayerState.ENDED && randomPlayActive) {
-            playNextRandomSong();
-          }
-        },
-        onError: () => {
-          if (randomPlayActive) setTimeout(playNextRandomSong, 600);
-        }
-      }
-    });
-  } else {
-    randomPlayer.loadVideoById(videoId);
-  }
+  randomPlayer.loadVideoById(videoId);
 }
 
-$('randomPlayToggleBtn')?.addEventListener('click', async () => {
+loadRandomYoutubeApiEarly();
+
+$('randomPlayToggleBtn')?.addEventListener('click', () => {
+  if (!randomPlayerReady) {
+    $('randomNowPlaying').textContent = 'YouTubeプレーヤーを準備中です。数秒後にもう一度押してください。';
+    loadRandomYoutubeApiEarly();
+    return;
+  }
   if (!randomPlayActive) {
     randomPlayActive = true;
-    if (randomPlayer && randomCurrentSongId) {
+    if (randomCurrentSongId && randomPlayer?.getPlayerState() === YT.PlayerState.PAUSED) {
       randomPlayer.playVideo();
       $('randomPlayToggleBtn').textContent = '⏸ 一時停止';
     } else {
-      await playNextRandomSong();
+      playNextRandomSong();
     }
   } else {
     randomPlayActive = false;
@@ -587,6 +591,7 @@ $('randomPlayToggleBtn')?.addEventListener('click', async () => {
 });
 
 $('randomNextBtn')?.addEventListener('click', () => {
+  if (!randomPlayerReady) return;
   randomPlayActive = true;
   playNextRandomSong();
 });
