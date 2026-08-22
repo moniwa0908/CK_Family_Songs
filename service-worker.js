@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ck-family-songs-v7-4-0-strong-next-live';
+const CACHE_NAME = 'ck-family-songs-v7-4-1-random-continuous';
 const APP_FILES = [
   './',
   './index.html',

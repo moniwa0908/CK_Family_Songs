@@ -77,6 +77,24 @@
             <p id="nextAttendingLiveMeta" class="muted"></p>
           </div>
 
+          <section class="random-player-card" aria-labelledby="randomPlayerHeading">
+            <div class="random-player-head">
+              <div>
+                <p class="eyebrow">RANDOM PLAY</p>
+                <h2 id="randomPlayerHeading">YouTube ランダム連続再生</h2>
+              </div>
+              <button id="randomPlayToggleBtn" class="primary" type="button">▶ 連続再生</button>
+            </div>
+            <p id="randomNowPlaying" class="random-now-playing muted">動画登録済みの曲からランダムで再生します。</p>
+            <div id="randomPlayerWrap" class="random-video-wrap hidden">
+              <iframe id="randomYoutubePlayer" title="ランダム連続再生" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+              <div class="random-player-actions">
+                <button id="randomNextBtn" class="ghost" type="button">次の曲へ</button>
+                <button id="randomStopBtn" class="ghost" type="button">停止</button>
+              </div>
+            </div>
+          </section>
+
           <section class="home-news-card" aria-labelledby="homeNewsHeading">
             <div class="home-news-head">
               <h2 id="homeNewsHeading">C&amp;K NEWS</h2>
@@ -245,5 +263,5 @@
     loadOfficialNews();
   </script>
   <script type="module" src="app.js"></script>
-  <footer class="app-version">Ver.7.4.0 次に行くライブ強調版</body>
+  <footer class="app-version">Ver.7.4.1 YouTubeランダム連続再生版</body>
 </html>
