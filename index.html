@@ -76,30 +76,7 @@
             <h2 id="nextAttendingLiveTitle">予定を読み込み中…</h2>
             <p id="nextAttendingLiveMeta" class="muted"></p>
           </div>
-
-          <section class="random-player-card" aria-labelledby="randomPlayerHeading">
-            <div class="random-player-head">
-              <div>
-                <p class="eyebrow">RANDOM PLAY</p>
-                <h2 id="randomPlayerHeading">YouTube ランダム連続再生</h2>
-              </div>
-              <button id="randomPlayToggleBtn" class="primary" type="button">▶ 連続再生</button>
-            </div>
-            <p id="randomNowPlaying" class="random-now-playing muted">ボタンを押すと動画登録済み曲からすぐランダム再生します。</p>
-            <div id="randomPlayerWrap" class="random-video-wrap hidden">
-              <iframe id="randomYoutubePlayer" title="ランダム連続再生" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-              <div class="random-player-actions">
-                <button id="randomNextBtn" class="ghost" type="button">次の曲へ</button>
-                <button id="randomStopBtn" class="ghost" type="button">停止</button>
-              </div>
-              <section id="randomLyricsWrap" class="random-lyrics-wrap">
-                <div class="random-lyrics-head"><strong>歌詞</strong><span id="randomLyricsTitle" class="muted"></span></div>
-                <pre id="randomLyrics" class="lyrics random-lyrics"></pre>
-              </section>
-            </div>
-          </section>
-
-          <section class="home-news-card" aria-labelledby="homeNewsHeading">
+<section class="home-news-card" aria-labelledby="homeNewsHeading">
             <div class="home-news-head">
               <h2 id="homeNewsHeading">C&amp;K NEWS</h2>
               <a href="https://c-and-k.info/contents/news" target="_blank" rel="noopener">すべて見る</a>
@@ -132,6 +109,28 @@
           <div id="songList" class="card-list"></div>
         </section>
 
+        <section id="randomTab" class="tab-page"><div class="random-player-card" aria-labelledby="randomPlayerHeading">
+            <div class="random-player-head">
+              <div>
+                <p class="eyebrow">RANDOM PLAY</p>
+                <h2 id="randomPlayerHeading">YouTube ランダム連続再生</h2>
+              </div>
+              <button id="randomPlayToggleBtn" class="primary" type="button">▶ 連続再生</button>
+            </div>
+            <p id="randomNowPlaying" class="random-now-playing muted">ボタンを押すと動画登録済み曲からすぐランダム再生します。</p>
+            <div id="randomPlayerWrap" class="random-video-wrap hidden">
+              <iframe id="randomYoutubePlayer" title="ランダム連続再生" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+              <div class="random-player-actions">
+                <button id="randomNextBtn" class="ghost" type="button">次の曲へ</button>
+                <button id="randomStopBtn" class="ghost" type="button">停止</button>
+              </div>
+              <section id="randomLyricsWrap" class="random-lyrics-wrap">
+                <div class="random-lyrics-head"><strong>歌詞</strong><span id="randomLyricsTitle" class="muted"></span></div>
+                <pre id="randomLyrics" class="lyrics random-lyrics"></pre>
+              </div></section>
+            </div>
+          </section>
+
         <section id="livesTab" class="tab-page">
           <div class="toolbar live-toolbar sticky-tools">
             <select id="liveFilter"><option value="all">すべて</option><option value="upcoming">今後</option><option value="past">過去</option><option value="attending">参加予定</option></select>
@@ -150,6 +149,7 @@
       <nav class="bottom-nav">
         <button data-tab="homeTab" class="active"><span>⌂</span>ホーム</button>
         <button data-tab="songsTab"><span>♫</span>曲一覧</button>
+        <button data-tab="randomTab"><span>⤨</span>ランダム再生</button>
         <button data-tab="livesTab"><span>◷</span>ライブ</button>
         <button data-tab="favoritesTab"><span>♡</span>お気に入り</button>
       </nav>
@@ -267,5 +267,5 @@
     loadOfficialNews();
   </script>
   <script type="module" src="app.js"></script>
-  <footer class="app-version">Ver.7.4.4 ランダム再生＋歌詞版</body>
+  <footer class="app-version">Ver.7.4.5 ランダム再生専用タブ版</body>
 </html>

@@ -556,3 +556,10 @@ a,
 .random-lyrics-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px}
 .random-lyrics-head strong{font-size:.9rem}.random-lyrics-head span{font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .random-lyrics{margin:0;max-height:42vh;overflow-y:auto;font-size:14px;line-height:1.8;white-space:pre-wrap;-webkit-overflow-scrolling:touch}
+
+/* Ver.7.4.5: 5タブ化 */
+.bottom-nav{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+.bottom-nav button{min-width:0;padding-left:2px!important;padding-right:2px!important;font-size:.72rem}
+.bottom-nav button span{display:block;font-size:1.05rem;margin-bottom:2px}
+#randomTab .random-player-card{margin-top:0}
+@media(max-width:380px){.bottom-nav button{font-size:.66rem}}
