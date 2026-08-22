@@ -552,40 +552,7 @@ a,
   }
 }
 
-
-/* Ver.7.4.1: YouTubeランダム連続再生 */
-.random-player-card {
-  margin: 10px 0 12px;
-  padding: 14px;
-  border-radius: 18px;
-  background: #fff;
-  border: 1px solid rgba(17,24,39,.08);
-  box-shadow: 0 5px 16px rgba(17,24,39,.07);
-}
-.random-player-head {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-.random-player-head .eyebrow { margin:0 0 3px; font-size:.7rem; opacity:.6; }
-.random-player-head h2 { margin:0; font-size:.98rem; }
-.random-now-playing { margin:8px 0 0; font-size:.82rem; }
-.random-video-wrap { margin-top:10px; }
-.random-video-wrap iframe {
-  display:block;
-  width:100%;
-  aspect-ratio:16/9;
-  border:0;
-  border-radius:14px;
-  background:#000;
-}
-.random-player-actions {
-  display:flex;
-  gap:8px;
-  margin-top:8px;
-}
-@media(max-width:600px){
-  .random-player-head { align-items:flex-start; }
-  .random-player-head .primary { white-space:nowrap; }
-}
+.random-lyrics-wrap{margin-top:12px;padding-top:10px;border-top:1px solid rgba(17,24,39,.09)}
+.random-lyrics-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px}
+.random-lyrics-head strong{font-size:.9rem}.random-lyrics-head span{font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.random-lyrics{margin:0;max-height:42vh;overflow-y:auto;font-size:14px;line-height:1.8;white-space:pre-wrap;-webkit-overflow-scrolling:touch}

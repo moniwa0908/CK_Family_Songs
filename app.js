@@ -523,6 +523,8 @@ function playNextRandomSong() {
   const videoId = getYoutubeVideoId(song.link);
   randomCurrentSongId = song.id;
   $('randomNowPlaying').textContent = `再生中：${song.title}`;
+  $('randomLyricsTitle').textContent = song.title;
+  $('randomLyrics').textContent = song.lyrics || '歌詞はまだ登録されていません。';
   $('randomPlayerWrap').classList.remove('hidden');
   $('randomPlayToggleBtn').textContent = '⏸ 停止';
 
