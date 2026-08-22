@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ck-family-songs-v7-4-6-true-continuous';
+const CACHE_NAME = 'ck-family-songs-v7-4-7-no-preparing';
 const APP_FILES = [
   './',
   './index.html',
