@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ck-family-songs-v7-4-8-playlist-embed';
+const CACHE_NAME = 'ck-family-songs-v7-4-9-lyrics-sync';
 const APP_FILES = [
   './',
   './index.html',

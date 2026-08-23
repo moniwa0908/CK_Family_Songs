@@ -492,6 +492,8 @@ $('favoriteBtn').addEventListener('click', () => {
 let randomPlayActive=false;
 let randomCurrentSongId='';
 let randomQueue=[];
+let randomSyncTimer=null;
+let randomLastVideoId='';
 
 function randomPlayableSongs(){return songs.filter(song=>getYoutubeVideoId(song.link));}
 function shuffleSongs(items){
@@ -514,7 +516,7 @@ function buildYouTubePlaylistEmbed(){
   randomCurrentSongId=first.id;
   $('randomNowPlaying').textContent=`ランダム連続再生：${playable.length}曲`;
   $('randomLyricsTitle').textContent=first.title;
-  $('randomLyrics').textContent=`最初の曲：${first.title}\n\nYouTubeプレーヤー内で次の動画へ自動で進みます。`;
+  $('randomLyrics').textContent=first.lyrics || '歌詞はまだ登録されていません。';
   $('randomPlayerWrap').classList.remove('hidden');
   $('randomPlayToggleBtn').textContent='■ 停止';
 
@@ -525,13 +527,67 @@ function buildYouTubePlaylistEmbed(){
   frame.allow='autoplay; encrypted-media; picture-in-picture';
   frame.allowFullscreen=true;
   const playlist=rest.length?`&playlist=${encodeURIComponent(rest.join(','))}`:'';
-  frame.src=`https://www.youtube.com/embed/${encodeURIComponent(firstId)}?playsinline=1&rel=0&autoplay=1${playlist}`;
+  frame.src=`https://www.youtube.com/embed/${encodeURIComponent(firstId)}?playsinline=1&rel=0&autoplay=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}${playlist}`;
   oldFrame.replaceWith(frame);
+  randomLastVideoId=firstId;
+  startRandomLyricsSync();
   return true;
 }
+
+function syncLyricsToVideoId(videoId){
+  if(!videoId || videoId===randomLastVideoId) return;
+  const song=randomQueue.find(item=>getYoutubeVideoId(item.link)===videoId)
+    || songs.find(item=>getYoutubeVideoId(item.link)===videoId);
+  if(!song) return;
+  randomLastVideoId=videoId;
+  randomCurrentSongId=song.id;
+  $('randomNowPlaying').textContent=`再生中：${song.title}`;
+  $('randomLyricsTitle').textContent=song.title;
+  $('randomLyrics').textContent=song.lyrics || '歌詞はまだ登録されていません。';
+}
+function requestRandomVideoData(){
+  const frame=$('randomYoutubePlayer');
+  if(!frame?.contentWindow || !randomPlayActive) return;
+  try{
+    frame.contentWindow.postMessage(JSON.stringify({
+      event:'command',
+      func:'getVideoUrl',
+      args:[]
+    }),'*');
+    frame.contentWindow.postMessage(JSON.stringify({
+      event:'command',
+      func:'getVideoData',
+      args:[]
+    }),'*');
+  }catch(_){}
+}
+function startRandomLyricsSync(){
+  if(randomSyncTimer) clearInterval(randomSyncTimer);
+  randomSyncTimer=setInterval(requestRandomVideoData,800);
+}
+function stopRandomLyricsSync(){
+  if(randomSyncTimer) clearInterval(randomSyncTimer);
+  randomSyncTimer=null;
+}
+window.addEventListener('message',event=>{
+  if(!String(event.origin||'').includes('youtube.com')) return;
+  let data=event.data;
+  if(typeof data==='string'){try{data=JSON.parse(data)}catch(_){return}}
+  if(!data) return;
+  let videoId='';
+  if(data.info?.videoData?.video_id) videoId=data.info.videoData.video_id;
+  else if(data.info?.video_id) videoId=data.info.video_id;
+  else if(typeof data.info==='string'){
+    const m=data.info.match(/[?&]v=([^&]+)/);
+    if(m) videoId=m[1];
+  }
+  if(videoId) syncLyricsToVideoId(videoId);
+});
+
 $('randomPlayToggleBtn')?.addEventListener('click',()=>{
   if(randomPlayActive){
     randomPlayActive=false;
+    stopRandomLyricsSync();
     const frame=$('randomYoutubePlayer'); if(frame) frame.src='about:blank';
     $('randomPlayerWrap').classList.add('hidden');
     $('randomPlayToggleBtn').textContent='▶ 連続再生';
@@ -549,7 +605,7 @@ $('randomNextBtn')?.addEventListener('click',()=>{
   buildYouTubePlaylistEmbed();
 });
 $('randomStopBtn')?.addEventListener('click',()=>{
-  randomPlayActive=false; randomQueue=[]; randomCurrentSongId='';
+  randomPlayActive=false; stopRandomLyricsSync(); randomQueue=[]; randomCurrentSongId=''; randomLastVideoId='';
   const frame=$('randomYoutubePlayer'); if(frame) frame.src='about:blank';
   $('randomPlayerWrap').classList.add('hidden');
   $('randomPlayToggleBtn').textContent='▶ 連続再生';
