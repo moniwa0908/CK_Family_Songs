@@ -641,8 +641,35 @@ $('randomPlayToggleBtn')?.addEventListener('click',()=>{
   }
 });
 $('randomNextBtn')?.addEventListener('click',()=>{
-  randomPlayActive=true;
-  buildYouTubePlaylistEmbed();
+  const frame=$('randomYoutubePlayer');
+  if(!frame?.contentWindow || !randomPlayActive) return;
+
+  // 同じYouTubeプレーヤーのまま次の動画へ送る。
+  // iframeを作り直さないので、iPhoneで再度赤い再生ボタンを押す必要を減らす。
+  $('randomNowPlaying').textContent='次の曲へ移動中…';
+  $('randomLyricsTitle').textContent='';
+  $('randomLyrics').textContent='';
+  randomCurrentSongId='';
+  randomLastVideoId='';
+
+  try{
+    frame.contentWindow.postMessage(JSON.stringify({
+      event:'command',
+      func:'nextVideo',
+      args:[]
+    }),'https://www.youtube.com');
+
+    // nextVideo後も再生状態を明示的に継続。
+    setTimeout(()=>{
+      try{
+        frame.contentWindow.postMessage(JSON.stringify({
+          event:'command',
+          func:'playVideo',
+          args:[]
+        }),'https://www.youtube.com');
+      }catch(_){}
+    },180);
+  }catch(_){}
 });
 $('randomStopBtn')?.addEventListener('click',()=>{
   randomPlayActive=false; stopRandomLyricsSync(); randomQueue=[]; randomCurrentSongId=''; randomLastVideoId='';
