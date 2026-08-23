@@ -505,6 +505,11 @@ function shuffleSongs(items){
   return arr;
 }
 function buildYouTubePlaylistEmbed(){
+  $('randomNowPlaying').textContent='再生する曲を確認中…';
+  $('randomLyricsTitle').textContent='';
+  $('randomLyrics').textContent='';
+  randomCurrentSongId='';
+  randomLastVideoId='';
   const playable=shuffleSongs(randomPlayableSongs());
   if(!playable.length){
     $('randomNowPlaying').textContent='YouTube動画が登録されている曲がありません。';
@@ -513,10 +518,11 @@ function buildYouTubePlaylistEmbed(){
   randomQueue=playable;
   const ids=playable.map(song=>getYoutubeVideoId(song.link)).filter(Boolean);
   const first=playable[0], firstId=ids[0], rest=ids.slice(1);
-  randomCurrentSongId=first.id;
-  $('randomNowPlaying').textContent=`ランダム連続再生：${playable.length}曲`;
-  $('randomLyricsTitle').textContent=first.title;
-  $('randomLyrics').textContent=first.lyrics || '歌詞はまだ登録されていません。';
+  randomCurrentSongId='';
+  randomLastVideoId='';
+  $('randomNowPlaying').textContent='再生する曲を確認中…';
+  $('randomLyricsTitle').textContent='';
+  $('randomLyrics').textContent='';
   $('randomPlayerWrap').classList.remove('hidden');
   $('randomPlayToggleBtn').textContent='■ 停止';
 
