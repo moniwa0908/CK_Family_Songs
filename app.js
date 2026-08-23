@@ -529,58 +529,92 @@ function buildYouTubePlaylistEmbed(){
   const playlist=rest.length?`&playlist=${encodeURIComponent(rest.join(','))}`:'';
   frame.src=`https://www.youtube.com/embed/${encodeURIComponent(firstId)}?playsinline=1&rel=0&autoplay=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}${playlist}`;
   oldFrame.replaceWith(frame);
-  randomLastVideoId=firstId;
+  randomLastVideoId='';
   startRandomLyricsSync();
   return true;
 }
 
 function syncLyricsToVideoId(videoId){
-  if(!videoId || videoId===randomLastVideoId) return;
-  const song=randomQueue.find(item=>getYoutubeVideoId(item.link)===videoId)
-    || songs.find(item=>getYoutubeVideoId(item.link)===videoId);
+  if(!videoId) return;
+
+  const normalizedId=String(videoId).trim();
+  if(!normalizedId || normalizedId===randomLastVideoId) return;
+
+  const song=songs.find(item=>getYoutubeVideoId(item.link)===normalizedId);
   if(!song) return;
-  randomLastVideoId=videoId;
+
+  randomLastVideoId=normalizedId;
   randomCurrentSongId=song.id;
   $('randomNowPlaying').textContent=`再生中：${song.title}`;
   $('randomLyricsTitle').textContent=song.title;
   $('randomLyrics').textContent=song.lyrics || '歌詞はまだ登録されていません。';
 }
+
+function currentRandomFrame(){
+  return $('randomYoutubePlayer');
+}
+
 function requestRandomVideoData(){
-  const frame=$('randomYoutubePlayer');
+  const frame=currentRandomFrame();
   if(!frame?.contentWindow || !randomPlayActive) return;
+
   try{
+    // 現在のiframeだけに問い合わせる。
     frame.contentWindow.postMessage(JSON.stringify({
-      event:'command',
-      func:'getVideoUrl',
-      args:[]
-    }),'*');
+      event:'listening',
+      id:'ck-random-player'
+    }),'https://www.youtube.com');
+
     frame.contentWindow.postMessage(JSON.stringify({
       event:'command',
       func:'getVideoData',
       args:[]
-    }),'*');
+    }),'https://www.youtube.com');
   }catch(_){}
 }
+
 function startRandomLyricsSync(){
-  if(randomSyncTimer) clearInterval(randomSyncTimer);
-  randomSyncTimer=setInterval(requestRandomVideoData,800);
+  stopRandomLyricsSync();
+  randomSyncTimer=setInterval(requestRandomVideoData,700);
+  setTimeout(requestRandomVideoData,250);
 }
+
 function stopRandomLyricsSync(){
   if(randomSyncTimer) clearInterval(randomSyncTimer);
   randomSyncTimer=null;
 }
+
 window.addEventListener('message',event=>{
-  if(!String(event.origin||'').includes('youtube.com')) return;
+  if(!randomPlayActive) return;
+
+  const frame=currentRandomFrame();
+
+  // 重要: 現在表示中のYouTube iframe本人からの通知だけ採用する。
+  if(!frame?.contentWindow || event.source!==frame.contentWindow) return;
+
+  const origin=String(event.origin||'');
+  if(
+    origin!=='https://www.youtube.com' &&
+    origin!=='https://www.youtube-nocookie.com'
+  ) return;
+
   let data=event.data;
-  if(typeof data==='string'){try{data=JSON.parse(data)}catch(_){return}}
-  if(!data) return;
-  let videoId='';
-  if(data.info?.videoData?.video_id) videoId=data.info.videoData.video_id;
-  else if(data.info?.video_id) videoId=data.info.video_id;
-  else if(typeof data.info==='string'){
-    const m=data.info.match(/[?&]v=([^&]+)/);
-    if(m) videoId=m[1];
+  if(typeof data==='string'){
+    try{data=JSON.parse(data)}catch(_){return}
   }
+  if(!data) return;
+
+  let videoId='';
+
+  // YouTube iframeが送るinfoDeliveryのvideoDataを最優先。
+  if(data.event==='infoDelivery' && data.info?.videoData?.video_id){
+    videoId=data.info.videoData.video_id;
+  }else if(data.info?.videoData?.video_id){
+    videoId=data.info.videoData.video_id;
+  }else if(data.info?.video_id){
+    videoId=data.info.video_id;
+  }
+
   if(videoId) syncLyricsToVideoId(videoId);
 });
 
