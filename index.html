@@ -111,13 +111,12 @@
 
         <section id="randomTab" class="tab-page"><div class="random-player-card" aria-labelledby="randomPlayerHeading">
             <div class="random-player-head">
-              <div>
-                <p class="eyebrow">RANDOM PLAY</p>
-                <h2 id="randomPlayerHeading">YouTube ランダム連続再生</h2>
-              </div>
-              <button id="randomPlayToggleBtn" class="primary" type="button">▶ 連続再生</button>
+              <h2 id="randomPlayerHeading">YouTube ランダム連続再生</h2>
             </div>
-            <p id="randomNowPlaying" class="random-now-playing muted">ボタンを押すと動画登録済み曲からすぐランダム再生します。</p>
+            <div class="random-control-row">
+              <button id="randomPlayToggleBtn" class="primary" type="button">▶ 連続再生</button>
+              <p id="randomNowPlaying" class="random-now-playing muted">動画登録済み曲からランダム再生します。</p>
+            </div>
             <div id="randomPlayerWrap" class="random-video-wrap hidden">
               <iframe id="randomYoutubePlayer" title="ランダム連続再生" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
               <div class="random-player-actions">
@@ -267,5 +266,5 @@
     loadOfficialNews();
   </script>
   <script type="module" src="app.js"></script>
-  <footer class="app-version">Ver.7.5.0 ランダム歌詞同期修正版</body>
+  <footer class="app-version">Ver.7.5.1 ランダム再生コンパクト版</body>
 </html>

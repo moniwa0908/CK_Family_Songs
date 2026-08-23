@@ -563,3 +563,15 @@ a,
 .bottom-nav button span{display:block;font-size:1.05rem;margin-bottom:2px}
 #randomTab .random-player-card{margin-top:0}
 @media(max-width:380px){.bottom-nav button{font-size:.66rem}}
+
+#randomTab .random-player-card{padding-top:9px;padding-bottom:9px}
+#randomTab .random-player-head{display:block;margin-bottom:5px}
+#randomTab .random-player-head h2{margin:0;font-size:.98rem}
+#randomTab .random-control-row{display:flex;align-items:center;gap:8px;min-width:0;margin:0 0 5px}
+#randomTab .random-control-row #randomPlayToggleBtn{flex:0 0 auto;min-height:36px;padding:6px 10px;white-space:nowrap}
+#randomTab .random-control-row .random-now-playing{flex:1 1 auto;min-width:0;margin:0;font-size:.78rem;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#randomTab .random-video-wrap{margin-top:4px}
+#randomTab .random-player-actions{margin-top:4px}
+#randomTab .random-lyrics-wrap{margin-top:5px;padding-top:5px}
+#randomTab .random-lyrics-head{margin-bottom:3px}
+#randomTab .random-lyrics{max-height:54vh;line-height:1.7}
