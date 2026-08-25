@@ -250,10 +250,21 @@
         const items = Array.isArray(data.items) ? data.items.slice(0, 3) : [];
         if (!items.length) throw new Error('no news items');
         host.innerHTML = items.map(item => {
-          const shortDate = String(item.date || '').replace(/^20\d{2}[.\-/]/, '').replace(/[.\-]/g, '/');
+          const rawDate = String(item.date || '').trim();
+          const shortDate = rawDate.replace(/^20\d{2}[.\-/]/, '').replace(/[.\-]/g, '/');
+          const parsed = rawDate.match(/(20\d{2})[.\-/](\d{1,2})[.\-/](\d{1,2})/);
+          let isNew = false;
+          if (parsed) {
+            const published = new Date(Number(parsed[1]), Number(parsed[2]) - 1, Number(parsed[3]));
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            published.setHours(0,0,0,0);
+            const ageDays = Math.floor((today - published) / 86400000);
+            isNew = ageDays >= 0 && ageDays <= 2;
+          }
           return `<a class="home-news-item" href="${escapeNewsHtml(item.url)}" target="_blank" rel="noopener">
             <time>${escapeNewsHtml(shortDate)}</time>
-            <span>${escapeNewsHtml(item.title)}</span>
+            <span class="home-news-title">${isNew ? '<b class="news-new-badge">NEW</b>' : ''}${escapeNewsHtml(item.title)}</span>
           </a>`;
         }).join('');
       } catch (error) {

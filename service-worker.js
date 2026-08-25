@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ck-family-songs-v7-5-3-next-without-restart';
+const CACHE_NAME = 'ck-family-songs-v7-5-4-news-new-badge';
 const APP_FILES = [
   './',
   './index.html',
