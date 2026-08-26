@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ck-family-songs-v7-5-5-live-scroll-fix';
+const CACHE_NAME = 'ck-family-songs-v7-5-6-live-internal-scroll';
 const APP_FILES = [
   './',
   './index.html',
