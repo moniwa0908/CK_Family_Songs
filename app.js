@@ -878,7 +878,6 @@ function scrollNearestLiveToCenter() {
     return;
   }
 
-  // 今日以降で最初の公演を優先。なければ一番新しい過去公演。
   const nearest = ordered.find(live => live.date >= today) || ordered[ordered.length - 1];
 
   requestAnimationFrame(() => {
@@ -886,19 +885,31 @@ function scrollNearestLiveToCenter() {
       const buttons = [...document.querySelectorAll('#liveList [data-live]')];
       const target = buttons.find(button => button.dataset.live === nearest.id);
 
-      if (target) {
-        target.scrollIntoView({
-          behavior: 'auto',
-          block: 'center',
-          inline: 'nearest'
-        });
-      } else {
-        // 絞り込み等で対象が表示されていない場合はライブ一覧の先頭へ。
-        document.getElementById('liveList')?.scrollIntoView({
-          behavior: 'auto',
-          block: 'start'
-        });
+      if (!target) {
+        const list = document.getElementById('liveList');
+        if (list) {
+          const y = window.scrollY + list.getBoundingClientRect().top - 12;
+          window.scrollTo({ top: Math.max(0, y), left: 0, behavior: 'auto' });
+        }
+        return;
       }
+
+      // iPhone SafariでscrollIntoView(block:center)を使うと、
+      // 上側に巨大な空白や末尾の欠けが起きることがあるため、
+      // 実座標から安全なスクロール位置を計算する。
+      const rect = target.getBoundingClientRect();
+      const absoluteTop = window.scrollY + rect.top;
+      const viewportH = window.innerHeight || document.documentElement.clientHeight;
+      const nav = document.querySelector('.bottom-nav');
+      const navH = nav ? nav.getBoundingClientRect().height : 0;
+      const usableH = Math.max(240, viewportH - navH);
+      const desired = absoluteTop - Math.max(12, (usableH - rect.height) / 2);
+
+      const doc = document.documentElement;
+      const maxScroll = Math.max(0, doc.scrollHeight - viewportH);
+      const safeTop = Math.min(Math.max(0, desired), maxScroll);
+
+      window.scrollTo({ top: safeTop, left: 0, behavior: 'auto' });
     });
   });
 }

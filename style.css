@@ -579,3 +579,17 @@ a,
 /* Ver.7.5.4 NEWS NEW badge */
 .home-news-title{min-width:0}
 .news-new-badge{display:inline-flex;align-items:center;justify-content:center;margin-right:6px;padding:2px 6px;border-radius:999px;background:#ff4f91;color:#fff;font-size:.62rem;font-weight:900;line-height:1.25;letter-spacing:.04em;vertical-align:1px}
+
+
+/* Ver.7.5.5: ライブ一覧 iPhoneスクロール修正 */
+#livesTab {
+  min-height: 0 !important;
+  padding-bottom: calc(118px + env(safe-area-inset-bottom)) !important;
+}
+#livesTab #liveList {
+  min-height: 0 !important;
+  padding-bottom: 12px;
+}
+#mainView {
+  padding-bottom: calc(88px + env(safe-area-inset-bottom)) !important;
+}

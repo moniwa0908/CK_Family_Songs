@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ck-family-songs-v7-5-4-news-new-badge';
+const CACHE_NAME = 'ck-family-songs-v7-5-5-live-scroll-fix';
 const APP_FILES = [
   './',
   './index.html',
