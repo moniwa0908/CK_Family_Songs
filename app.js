@@ -386,38 +386,7 @@ function renderFavorites() {
 }
 
 
-function renderNearestLiveCard() {
-  const card = $('nearestLiveCard');
-  const title = $('nearestLiveTitle');
-  const meta = $('nearestLiveMeta');
-  const openBtn = $('nearestLiveOpenBtn');
-  if (!card || !title || !meta || !openBtn) return;
-
-  const today = getJstDateKey();
-  const upcoming = [...lives]
-    .filter(live => live?.date && live.date >= today)
-    .sort((a, b) => String(a.date).localeCompare(String(b.date)));
-
-  const nearest = upcoming[0];
-  if (!nearest) {
-    card.classList.add('hidden');
-    openBtn.dataset.live = '';
-    return;
-  }
-
-  title.textContent = nearest.title || 'タイトル未設定';
-  meta.textContent = `${formatDate(nearest.date)} ${nearest.time || ''}${nearest.venue ? ` ・ ${nearest.venue}` : ''}`;
-  openBtn.dataset.live = nearest.id;
-  card.classList.remove('hidden');
-}
-
-$('nearestLiveOpenBtn')?.addEventListener('click', () => {
-  const id = $('nearestLiveOpenBtn')?.dataset.live;
-  if (id) openLive(id);
-});
-
 function renderLives() {
-  renderNearestLiveCard();
   const today = getJstDateKey();
   const ordered = [...lives].sort((a, b) => (a.date || '').localeCompare(b.date || ''));
   const filter = $('liveFilter')?.value || 'all';
@@ -965,6 +934,62 @@ function hardResetPageScroll() {
   }, 80);
 }
 
+
+function scrollToNearestLiveCard() {
+  const today = getJstDateKey();
+  const nearest = [...lives]
+    .filter(live => live?.date && live.date >= today)
+    .sort((a, b) => String(a.date).localeCompare(String(b.date)))[0];
+
+  if (!nearest) {
+    hardResetPageScroll();
+    return;
+  }
+
+  const performScroll = () => {
+    const targetButton = [...document.querySelectorAll('#liveList [data-live]')]
+      .find(button => button.dataset.live === nearest.id);
+    const target = targetButton?.closest('.live-card') || targetButton;
+    if (!target) return false;
+
+    const header = document.querySelector('.topbar');
+    const headerH = header ? header.getBoundingClientRect().height : 0;
+    const viewportH = window.innerHeight || document.documentElement.clientHeight;
+
+    const rect = target.getBoundingClientRect();
+    const absoluteTop = window.scrollY + rect.top;
+
+    // 直近カードが画面中央より少し上に来る位置。
+    const desired = absoluteTop - Math.max(headerH + 14, (viewportH - rect.height) * 0.38);
+
+    const doc = document.documentElement;
+    const body = document.body;
+    const fullHeight = Math.max(
+      doc.scrollHeight,
+      body?.scrollHeight || 0,
+      doc.offsetHeight,
+      body?.offsetHeight || 0
+    );
+    const maxScroll = Math.max(0, fullHeight - viewportH);
+    const safeTop = Math.min(Math.max(0, desired), maxScroll);
+
+    window.scrollTo({ top: safeTop, left: 0, behavior: 'auto' });
+    return true;
+  };
+
+  // Firestore描画・Safariレイアウト確定後にも再試行。
+  hardResetPageScroll();
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      if (!performScroll()) {
+        setTimeout(performScroll, 80);
+      } else {
+        setTimeout(performScroll, 120);
+      }
+    });
+  });
+}
+
 document.querySelectorAll('.bottom-nav button').forEach(button => {
   button.addEventListener('click', () => {
     document.querySelectorAll('.bottom-nav button').forEach(item => item.classList.remove('active'));
@@ -983,7 +1008,6 @@ $('homeSongsLink')?.addEventListener('click', () => {
 
 $('homeLivesLink')?.addEventListener('click', () => {
   document.querySelector('.bottom-nav button[data-tab="livesTab"]')?.click();
-  hardResetPageScroll();
 });
 
 

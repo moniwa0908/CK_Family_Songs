@@ -700,3 +700,11 @@ body #app #mainView {
   display:block;margin-top:5px;color:#6b7280;font-size:.8rem;line-height:1.35
 }
 #nearestLiveCard.hidden {display:none!important}
+
+
+/* Ver.7.6.1: 直近ライブカードではなく実カード位置へ移動 */
+#nearestLiveCard { display:none !important; }
+
+#liveList .live-card {
+  scroll-margin-top: 88px;
+}
