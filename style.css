@@ -679,31 +679,8 @@ body #app #mainView {
 }
 
 
-/* Ver.7.6.0: 直近ライブ固定表示 */
-#nearestLiveCard {
-  margin: 0 0 12px;
-  padding: 12px 14px;
-  border: 2px solid #ff7aa8;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #fff1f6 0%, #fff9ec 55%, #eef7ff 100%);
-  box-shadow: 0 6px 16px rgba(255, 92, 146, .12);
-}
-#nearestLiveCard .nearest-live-label {
-  display:inline-block;margin-bottom:6px;padding:3px 8px;border-radius:999px;
-  background:#ff4f91;color:#fff;font-size:.68rem;font-weight:900;letter-spacing:.08em;
-}
-#nearestLiveCard .nearest-live-open {all:unset;display:block;width:100%;cursor:pointer;touch-action:manipulation}
-#nearestLiveCard .nearest-live-open strong {
-  display:block;color:#7a1745;font-size:1rem;line-height:1.35;font-weight:850
-}
-#nearestLiveCard .nearest-live-open span {
-  display:block;margin-top:5px;color:#6b7280;font-size:.8rem;line-height:1.35
-}
-#nearestLiveCard.hidden {display:none!important}
-
-
 /* Ver.7.6.1: 直近ライブカードではなく実カード位置へ移動 */
-#nearestLiveCard { display:none !important; }
+
 
 #liveList .live-card {
   scroll-margin-top: 88px;
