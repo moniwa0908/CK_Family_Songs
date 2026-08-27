@@ -595,30 +595,21 @@ a,
 }
 
 
-/* Ver.7.5.6: ライブ画面は固定、一覧だけ内部スクロール */
+/* Ver.7.5.7: ライブ一覧を通常スクロールへ戻す */
 #livesTab {
-  padding-bottom: 0 !important;
   min-height: 0 !important;
-  overflow: hidden;
-}
-
-#livesTab .live-toolbar {
-  position: static !important;
-  top: auto !important;
-  margin: -8px -14px 10px !important;
-  z-index: auto !important;
+  overflow: visible !important;
+  padding-bottom: calc(120px + env(safe-area-inset-bottom)) !important;
 }
 
 #livesTab #liveList {
-  min-height: 260px !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  padding: 0 0 18px !important;
-  scroll-behavior: auto;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  padding-bottom: 24px !important;
 }
 
 #mainView {
-  padding-bottom: 0 !important;
+  padding-bottom: calc(88px + env(safe-area-inset-bottom)) !important;
 }

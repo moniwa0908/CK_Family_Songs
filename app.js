@@ -868,63 +868,51 @@ document.querySelectorAll('.close-dialog').forEach(button => {
 });
 
 function scrollNearestLiveToCenter() {
-  // ページ本体は常に上端へ戻し、ライブ一覧だけを内部スクロールさせる。
-  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-
-  const list = document.getElementById('liveList');
-  if (!list) return;
-
   const today = getJstDateKey();
   const ordered = [...lives]
     .filter(live => live?.date)
     .sort((a, b) => String(a.date).localeCompare(String(b.date)));
 
+  if (!ordered.length) {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    return;
+  }
+
+  const nearest = ordered.find(live => live.date >= today) || ordered[ordered.length - 1];
+
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      // 下部固定ナビまでの残り高さをライブ一覧の高さにする。
-      const nav = document.querySelector('.bottom-nav');
-      const listRect = list.getBoundingClientRect();
-      const navTop = nav ? nav.getBoundingClientRect().top : window.innerHeight;
-      const available = Math.max(260, navTop - listRect.top - 8);
-      list.style.height = `${available}px`;
-      list.style.maxHeight = `${available}px`;
-
-      if (!ordered.length) {
-        list.scrollTop = 0;
-        return;
-      }
-
-      const nearest = ordered.find(live => live.date >= today) || ordered[ordered.length - 1];
-      const target = [...list.querySelectorAll('[data-live]')]
-        .find(button => button.dataset.live === nearest.id);
+      const buttons = [...document.querySelectorAll('#liveList [data-live]')];
+      const target = buttons.find(button => button.dataset.live === nearest.id);
 
       if (!target) {
-        list.scrollTop = 0;
+        const list = document.getElementById('liveList');
+        if (list) {
+          const y = window.scrollY + list.getBoundingClientRect().top - 12;
+          window.scrollTo({ top: Math.max(0, y), left: 0, behavior: 'auto' });
+        }
         return;
       }
 
-      const card = target.closest('.live-card') || target;
-      const desired = card.offsetTop - Math.max(0, (list.clientHeight - card.offsetHeight) / 2);
-      const maxScroll = Math.max(0, list.scrollHeight - list.clientHeight);
-      list.scrollTop = Math.min(Math.max(0, desired), maxScroll);
+      // iPhone SafariでscrollIntoView(block:center)を使うと、
+      // 上側に巨大な空白や末尾の欠けが起きることがあるため、
+      // 実座標から安全なスクロール位置を計算する。
+      const rect = target.getBoundingClientRect();
+      const absoluteTop = window.scrollY + rect.top;
+      const viewportH = window.innerHeight || document.documentElement.clientHeight;
+      const nav = document.querySelector('.bottom-nav');
+      const navH = nav ? nav.getBoundingClientRect().height : 0;
+      const usableH = Math.max(240, viewportH - navH);
+      const desired = absoluteTop - Math.max(12, (usableH - rect.height) / 2);
+
+      const doc = document.documentElement;
+      const maxScroll = Math.max(0, doc.scrollHeight - viewportH);
+      const safeTop = Math.min(Math.max(0, desired), maxScroll);
+
+      window.scrollTo({ top: safeTop, left: 0, behavior: 'auto' });
     });
   });
 }
-
-function resizeLiveListViewport() {
-  if (!document.getElementById('livesTab')?.classList.contains('active')) return;
-  const list = document.getElementById('liveList');
-  const nav = document.querySelector('.bottom-nav');
-  if (!list) return;
-  const listRect = list.getBoundingClientRect();
-  const navTop = nav ? nav.getBoundingClientRect().top : window.innerHeight;
-  const available = Math.max(260, navTop - listRect.top - 8);
-  list.style.height = `${available}px`;
-  list.style.maxHeight = `${available}px`;
-}
-
-window.addEventListener('resize', resizeLiveListViewport);
-window.addEventListener('orientationchange', () => setTimeout(resizeLiveListViewport, 120));
 
 document.querySelectorAll('.bottom-nav button').forEach(button => {
   button.addEventListener('click', () => {
@@ -933,13 +921,7 @@ document.querySelectorAll('.bottom-nav button').forEach(button => {
     button.classList.add('active');
     $(button.dataset.tab).classList.add('active');
     updateViewerTools();
-    if (button.dataset.tab === 'livesTab') {
-      // ライブ画面は、今日に一番近い公演が画面中央に来る位置へ移動。
-      scrollNearestLiveToCenter();
-    } else {
-      // その他のタブはこれまでどおり上部から表示。
-      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   });
 });
 
