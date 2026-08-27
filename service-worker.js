@@ -1,10 +1,10 @@
-const CACHE_NAME = 'ck-family-songs-v7-6-2-remove-nearest-card';
+const CACHE_NAME = 'ck-family-songs-v7-6-3-nearest-live-actual-fix';
 const APP_FILES = [
   './',
   './index.html',
   './news.json',
-  './style.css?v=762',
-  './app.js?v=762',
+  './style.css?v=763',
+  './app.js?v=763',
   './song-seed.js',
   './song-cleanup.js',
   './live-seed.js',

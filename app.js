@@ -977,17 +977,21 @@ function scrollToNearestLiveCard() {
     return true;
   };
 
-  // Firestore描画・Safariレイアウト確定後にも再試行。
+  // タブ表示・家族モードのツール移動・Safariレイアウト確定後に再計算。
   hardResetPageScroll();
+
+  const retry = (delay) => setTimeout(() => {
+    if (document.getElementById('livesTab')?.classList.contains('active')) {
+      performScroll();
+    }
+  }, delay);
+
   requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      if (!performScroll()) {
-        setTimeout(performScroll, 80);
-      } else {
-        setTimeout(performScroll, 120);
-      }
-    });
+    requestAnimationFrame(() => performScroll());
   });
+  retry(80);
+  retry(180);
+  retry(350);
 }
 
 document.querySelectorAll('.bottom-nav button').forEach(button => {
@@ -997,7 +1001,13 @@ document.querySelectorAll('.bottom-nav button').forEach(button => {
     button.classList.add('active');
     $(button.dataset.tab).classList.add('active');
     updateViewerTools();
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+
+    if (button.dataset.tab === 'livesTab') {
+      // ライブタブだけ、実際の一覧内の直近ライブへ移動する。
+      scrollToNearestLiveCard();
+    } else {
+      hardResetPageScroll();
+    }
   });
 });
 
