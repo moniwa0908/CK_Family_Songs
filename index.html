@@ -9,7 +9,7 @@
   <title>CK Family Songs</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon.svg" />
-  <link rel="stylesheet" href="./style.css?v=759" />
+  <link rel="stylesheet" href="./style.css?v=760" />
 
   <style id="criticalFallbackStyle">
     html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f4f7fb;color:#111827}
@@ -131,6 +131,13 @@
           </div></section>
 
         <section id="livesTab" class="tab-page">
+          <section id="nearestLiveCard" class="nearest-live-card hidden" aria-label="直近ライブ">
+            <div class="nearest-live-label">NEXT LIVE</div>
+            <button id="nearestLiveOpenBtn" class="nearest-live-open" type="button">
+              <strong id="nearestLiveTitle"></strong>
+              <span id="nearestLiveMeta"></span>
+            </button>
+          </section>
           <div class="toolbar live-toolbar sticky-tools">
             <select id="liveFilter"><option value="all">すべて</option><option value="upcoming">今後</option><option value="past">過去</option><option value="attending">参加予定</option></select>
             <button id="seedLivesBtn" class="ghost admin-only">ライブ予定を一括登録</button>
@@ -276,6 +283,6 @@
     }
     loadOfficialNews();
   </script>
-  <script type="module" src="./app.js?v=759"></script>
-  <footer class="app-version">Ver.7.5.9 ライブ画面完全リセット版</body>
+  <script type="module" src="./app.js?v=760"></script>
+  <footer class="app-version">Ver.7.6.0 直近ライブ表示版</body>
 </html>

@@ -1,18 +1,10 @@
-# Ver.7.5.9 ライブ画面完全リセット版
+# Ver.7.6.0 直近ライブ表示版
 
-今回の対応:
-- Ver.7.5.8で修正した正しいHTML構造を採用
-- Safariのスクロール位置復元を無効化
-- ライブタブを開くたび、複数タイミングでページ最上部へ強制リセット
-- ライブ操作欄のstickyをライブ画面だけ解除
-- livesTab / liveList の位置・transform・height・overflowを通常状態へ強制
-- style.css / app.js に?v=759を付け、Safariの古いキャッシュを回避
-- Service Workerも新キャッシュへ切替
+- ライブタブ最上部に「NEXT LIVE」専用カードを追加
+- 今日以降で最も近いライブを自動表示
+- カードを押すとライブ詳細を開く
+- ライブ一覧の自動スクロールは使わないため、空白問題を再発させにくい
+- Ver.7.5.9のライブ画面安定レイアウトを維持
 
 GitHubへ上書き:
-- index.html
-- app.js
-- style.css
-- service-worker.js
-
-今回は4ファイルすべて必ず上書きしてください。
+index.html / app.js / style.css / service-worker.js

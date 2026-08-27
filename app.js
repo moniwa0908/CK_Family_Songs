@@ -385,7 +385,39 @@ function renderFavorites() {
   bindSongCards($('favoriteList'));
 }
 
+
+function renderNearestLiveCard() {
+  const card = $('nearestLiveCard');
+  const title = $('nearestLiveTitle');
+  const meta = $('nearestLiveMeta');
+  const openBtn = $('nearestLiveOpenBtn');
+  if (!card || !title || !meta || !openBtn) return;
+
+  const today = getJstDateKey();
+  const upcoming = [...lives]
+    .filter(live => live?.date && live.date >= today)
+    .sort((a, b) => String(a.date).localeCompare(String(b.date)));
+
+  const nearest = upcoming[0];
+  if (!nearest) {
+    card.classList.add('hidden');
+    openBtn.dataset.live = '';
+    return;
+  }
+
+  title.textContent = nearest.title || 'タイトル未設定';
+  meta.textContent = `${formatDate(nearest.date)} ${nearest.time || ''}${nearest.venue ? ` ・ ${nearest.venue}` : ''}`;
+  openBtn.dataset.live = nearest.id;
+  card.classList.remove('hidden');
+}
+
+$('nearestLiveOpenBtn')?.addEventListener('click', () => {
+  const id = $('nearestLiveOpenBtn')?.dataset.live;
+  if (id) openLive(id);
+});
+
 function renderLives() {
+  renderNearestLiveCard();
   const today = getJstDateKey();
   const ordered = [...lives].sort((a, b) => (a.date || '').localeCompare(b.date || ''));
   const filter = $('liveFilter')?.value || 'all';
