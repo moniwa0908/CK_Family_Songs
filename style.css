@@ -613,3 +613,67 @@ a,
 #mainView {
   padding-bottom: calc(88px + env(safe-area-inset-bottom)) !important;
 }
+
+
+/* =========================================================
+   Ver.7.5.9 ライブ画面完全リセット
+   ========================================================= */
+html, body {
+  scroll-padding-top: 0 !important;
+}
+
+main {
+  margin-top: 0 !important;
+  padding-top: 18px !important;
+  transform: none !important;
+}
+
+#livesTab {
+  position: static !important;
+  inset: auto !important;
+  top: auto !important;
+  transform: none !important;
+  translate: none !important;
+  margin: 0 !important;
+  padding-top: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  overflow: visible !important;
+  scroll-margin: 0 !important;
+  scroll-padding: 0 !important;
+  padding-bottom: calc(120px + env(safe-area-inset-bottom)) !important;
+}
+
+#livesTab.active {
+  display: block !important;
+}
+
+#livesTab .live-toolbar,
+#livesTab .sticky-tools {
+  position: static !important;
+  inset: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  translate: none !important;
+  margin: -8px -14px 12px !important;
+  padding: 10px 14px 12px !important;
+}
+
+#livesTab #liveList {
+  position: static !important;
+  transform: none !important;
+  translate: none !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  scroll-margin: 0 !important;
+}
+
+body #app #mainView {
+  min-height: 100dvh !important;
+  padding-bottom: calc(88px + env(safe-area-inset-bottom)) !important;
+}

@@ -874,7 +874,7 @@ function scrollNearestLiveToCenter() {
     .sort((a, b) => String(a.date).localeCompare(String(b.date)));
 
   if (!ordered.length) {
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    hardResetPageScroll();
     return;
   }
 
@@ -914,6 +914,25 @@ function scrollNearestLiveToCenter() {
   });
 }
 
+
+// Ver.7.5.9: Safariのスクロール位置復元を無効化
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+function hardResetPageScroll() {
+  const scroller = document.scrollingElement || document.documentElement;
+  if (scroller) scroller.scrollTop = 0;
+  window.scrollTo(0, 0);
+  requestAnimationFrame(() => {
+    if (scroller) scroller.scrollTop = 0;
+    window.scrollTo(0, 0);
+  });
+  setTimeout(() => {
+    if (scroller) scroller.scrollTop = 0;
+    window.scrollTo(0, 0);
+  }, 80);
+}
+
 document.querySelectorAll('.bottom-nav button').forEach(button => {
   button.addEventListener('click', () => {
     document.querySelectorAll('.bottom-nav button').forEach(item => item.classList.remove('active'));
@@ -932,6 +951,7 @@ $('homeSongsLink')?.addEventListener('click', () => {
 
 $('homeLivesLink')?.addEventListener('click', () => {
   document.querySelector('.bottom-nav button[data-tab="livesTab"]')?.click();
+  hardResetPageScroll();
 });
 
 
