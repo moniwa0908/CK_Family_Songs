@@ -399,9 +399,22 @@ function renderLives() {
   $('liveList').innerHTML = shown.length
     ? shown.map(live => {
         const attending = Boolean(live.attending) && live.date >= today;
+        const attendedPast = Boolean(live.attending) && live.date < today;
         const isNextAttending = Boolean(nextAttending && live.id === nextAttending.id);
-        return `<article class="item-card live-card ${attending ? 'attending-live' : ''} ${isNextAttending ? 'next-attending-live' : ''}"><button class="card-open" data-live="${live.id}">
-        <div class="live-badges"><span class="date-chip">${live.date >= today ? '今後' : '過去'}</span>${isNextAttending ? '<span class="next-attending-chip">★ 次に行くライブ</span>' : attending ? '<span class="attending-chip">★ 参加予定</span>' : ''}</div>
+        const liveClasses = [
+          attending ? 'attending-live' : '',
+          attendedPast ? 'attended-past-live' : '',
+          isNextAttending ? 'next-attending-live' : ''
+        ].filter(Boolean).join(' ');
+        const attendanceBadge = isNextAttending
+          ? '<span class="next-attending-chip">★ 次に行くライブ</span>'
+          : attending
+            ? '<span class="attending-chip">★ 参加予定</span>'
+            : attendedPast
+              ? '<span class="attended-past-chip">✓ 参加済み</span>'
+              : '';
+        return `<article class="item-card live-card ${liveClasses}"><button class="card-open" data-live="${live.id}">
+        <div class="live-badges"><span class="date-chip">${live.date >= today ? '今後' : '過去'}</span>${attendanceBadge}</div>
         <h3>${esc(live.title)}</h3>
         <div class="item-meta">${esc(formatDate(live.date))}${live.time ? ` ${esc(live.time)}` : ''} ・ ${esc(live.venue || '会場未設定')}</div>
       </button></article>`;

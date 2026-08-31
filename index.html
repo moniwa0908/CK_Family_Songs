@@ -9,7 +9,7 @@
   <title>CK Family Songs</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon.svg" />
-  <link rel="stylesheet" href="./style.css?v=763" />
+  <link rel="stylesheet" href="./style.css?v=764" />
 
   <style id="criticalFallbackStyle">
     html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f4f7fb;color:#111827}
@@ -213,7 +213,7 @@
       <div class="two-col"><label>開催日<input id="liveDate" type="date" required></label><label>開演時刻<input id="liveTime" type="time"></label></div>
       <label>会場<input id="liveVenue"></label>
       <label>座席・チケット情報<input id="liveSeat"></label>
-      <label class="check-label"><input id="liveAttending" type="checkbox"> 今後行く予定として強調表示する</label>
+      <label class="check-label"><input id="liveAttending" type="checkbox"> 参加する／参加したライブとして強調表示する</label>
       <label>セットリスト<textarea id="liveSetlist" rows="10" placeholder="1曲ごとに改行"></textarea></label>
       <label>メモ<textarea id="liveMemo" rows="4"></textarea></label>
       <div class="dialog-actions"><button type="button" id="deleteLiveBtn" class="danger hidden">削除</button><span></span><button type="button" class="ghost close-dialog">キャンセル</button><button type="submit" class="primary">保存</button></div>
@@ -276,6 +276,6 @@
     }
     loadOfficialNews();
   </script>
-  <script type="module" src="./app.js?v=763"></script>
-  <footer class="app-version">Ver.7.6.3 直近ライブ移動修正版</body>
+  <script type="module" src="./app.js?v=764"></script>
+  <footer class="app-version">Ver.7.6.4 過去ライブ参加済み表示版</body>
 </html>

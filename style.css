@@ -685,3 +685,8 @@ body #app #mainView {
 #liveList .live-card {
   scroll-margin-top: 88px;
 }
+
+#liveList .attended-past-live{border:2px solid #8fb7a4!important;background:linear-gradient(135deg,#f2faf6 0%,#fff 70%)!important;box-shadow:0 5px 14px rgba(70,120,95,.10)!important}
+#liveList .attended-past-live h3{color:#315e49}
+#liveList .attended-past-chip{display:inline-flex;align-items:center;padding:4px 9px;border-radius:999px;background:#dff3e8;color:#276447;font-size:.72rem;font-weight:900}
+#liveList .attended-past-live .date-chip{background:#edf5f0;color:#4b6b5a}

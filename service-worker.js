@@ -1,10 +1,10 @@
-const CACHE_NAME = 'ck-family-songs-v7-6-3-nearest-live-actual-fix';
+const CACHE_NAME = 'ck-family-songs-v7-6-4-past-attended';
 const APP_FILES = [
   './',
   './index.html',
   './news.json',
-  './style.css?v=763',
-  './app.js?v=763',
+  './style.css?v=764',
+  './app.js?v=764',
   './song-seed.js',
   './song-cleanup.js',
   './live-seed.js',
