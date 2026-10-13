@@ -541,7 +541,7 @@ function renderTourSongChecklist(){
   const box=$('tourSongChecklist');
   if(!box)return;
   const playable=songs.filter(song=>getYoutubeVideoId(song.link))
-    .sort((a,b)=>String(a.title).localeCompare(String(b.title),'ja'));
+    .sort(compareSongsByKana);
   box.replaceChildren();
   for(const song of playable){
     const label=document.createElement('label');

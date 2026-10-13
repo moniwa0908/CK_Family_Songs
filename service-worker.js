@@ -1,10 +1,10 @@
-const CACHE_NAME = 'ck-family-songs-v7-7-1-shared-tour';
+const CACHE_NAME = 'ck-family-songs-v7-7-2-tour-kana';
 const APP_FILES = [
   './',
   './index.html',
   './news.json',
-  './style.css?v=771',
-  './app.js?v=771',
+  './style.css?v=772',
+  './app.js?v=772',
   './song-seed.js',
   './song-cleanup.js',
   './live-seed.js',
