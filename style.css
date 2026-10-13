@@ -690,3 +690,5 @@ body #app #mainView {
 #liveList .attended-past-live h3{color:#315e49}
 #liveList .attended-past-chip{display:inline-flex;align-items:center;padding:4px 9px;border-radius:999px;background:#dff3e8;color:#276447;font-size:.72rem;font-weight:900}
 #liveList .attended-past-live .date-chip{background:#edf5f0;color:#4b6b5a}
+
+.tour-random-selector{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:8px 0 14px}.tour-random-selector select{max-width:100%;min-width:180px}.tour-song-manager{flex-basis:100%;padding:12px;border:1px solid #ddd;border-radius:12px;background:var(--card,#fff)}.tour-song-checklist{max-height:260px;overflow-y:auto;display:grid;grid-template-columns:1fr;gap:6px;margin:12px 0}.tour-song-choice{display:flex;align-items:center;gap:8px;padding:7px 4px;border-bottom:1px solid #eee}.tour-song-choice input{width:19px;height:19px;flex-shrink:0}

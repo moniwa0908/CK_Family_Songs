@@ -9,7 +9,7 @@
   <title>CK Family Songs</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon.svg" />
-  <link rel="stylesheet" href="./style.css?v=764" />
+  <link rel="stylesheet" href="./style.css?v=771" />
 
   <style id="criticalFallbackStyle">
     html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f4f7fb;color:#111827}
@@ -112,6 +112,17 @@
         <section id="randomTab" class="tab-page"><div class="random-player-card" aria-labelledby="randomPlayerHeading">
             <div class="random-player-head">
               <h2 id="randomPlayerHeading">YouTube ランダム連続再生</h2>
+            </div>
+            <div class="tour-random-selector">
+              <label for="randomModeSelect">再生モード</label>
+              <select id="randomModeSelect"><option value="all">全曲ランダム再生</option><option value="tour">2026/27 ツアーライブ再生</option></select>
+              <button id="tourSongManageBtn" class="ghost" type="button">ツアー曲を登録・編集</button>
+              <span id="tourSongCount" class="muted"></span>
+              <div id="tourSongManager" class="tour-song-manager hidden">
+                <p class="muted">YouTube動画を登録済みの曲から選択してください。Firebaseに保存され、家族全員で共有されます。</p>
+                <div id="tourSongChecklist" class="tour-song-checklist"></div>
+                <button id="tourSongSaveBtn" class="primary" type="button">登録を保存</button>
+              </div>
             </div>
             <div class="random-control-row">
               <button id="randomPlayToggleBtn" class="primary" type="button">▶ 連続再生</button>
@@ -276,6 +287,6 @@
     }
     loadOfficialNews();
   </script>
-  <script type="module" src="./app.js?v=764"></script>
+  <script type="module" src="./app.js?v=771"></script>
   <footer class="app-version">Ver.7.6.4 過去ライブ参加済み表示版</body>
 </html>
