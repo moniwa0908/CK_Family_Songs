@@ -1,1 +1,1 @@
-Ver.7.7.2 ツアー曲選択をあいうえお順に変更。曲一覧と同じよみがな優先の並び替えを使用。Firebase共有・登録状態は維持。GitHubへ index.html、app.js、style.css、service-worker.js を上書きしてください。
+Ver.7.7.3：ツアーモード選択時にFirebase共有登録曲をあいうえお順で表示。再生中は非表示、停止時は再表示。GitHubへ4ファイル上書き。

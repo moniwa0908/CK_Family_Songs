@@ -692,3 +692,5 @@ body #app #mainView {
 #liveList .attended-past-live .date-chip{background:#edf5f0;color:#4b6b5a}
 
 .tour-random-selector{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:8px 0 14px}.tour-random-selector select{max-width:100%;min-width:180px}.tour-song-manager{flex-basis:100%;padding:12px;border:1px solid #ddd;border-radius:12px;background:var(--card,#fff)}.tour-song-checklist{max-height:260px;overflow-y:auto;display:grid;grid-template-columns:1fr;gap:6px;margin:12px 0}.tour-song-choice{display:flex;align-items:center;gap:8px;padding:7px 4px;border-bottom:1px solid #eee}.tour-song-choice input{width:19px;height:19px;flex-shrink:0}
+
+.tour-registered-panel{flex-basis:100%;width:100%;padding:12px;border:1px solid #e6dbe7;border-radius:12px;background:#fffafd}.tour-registered-list{display:grid;grid-template-columns:1fr;max-height:320px;overflow-y:auto;margin-top:8px}.tour-registered-item{padding:9px 5px;border-bottom:1px solid #f0e8ef;font-size:.92rem}

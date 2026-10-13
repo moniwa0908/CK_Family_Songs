@@ -512,10 +512,23 @@ const TOUR_RANDOM_DOC = doc(db, 'settings', 'tour2026_27');
 let tourRandomIds = new Set();
 let tourSharedLoaded = false;
 
+function renderTourRegisteredList(){
+  const panel=$('tourRegisteredPanel'),list=$('tourRegisteredList');
+  if(!panel||!list)return;
+  const enabled=$('randomModeSelect')?.value==='tour';
+  panel.classList.toggle('hidden',!enabled||randomPlayActive);
+  if(!enabled)return;
+  list.replaceChildren();
+  if(!tourSharedLoaded){list.textContent='共有リストを読み込み中…';return;}
+  const registered=songs.filter(song=>tourRandomIds.has(String(song.id))&&getYoutubeVideoId(song.link)).sort(compareSongsByKana);
+  if(!registered.length){list.textContent='登録曲はありません。管理者が曲を登録してください。';return;}
+  for(const song of registered){const item=document.createElement('div');item.className='tour-registered-item';item.textContent=song.title;list.appendChild(item);}
+}
 function updateTourSongCount(){
   const count=songs.filter(song=>tourRandomIds.has(String(song.id))&&getYoutubeVideoId(song.link)).length;
   const el=$('tourSongCount');
   if(el)el.textContent=tourSharedLoaded ? `共有登録 ${count} 曲` : '共有リストを読込中';
+  renderTourRegisteredList();
 }
 async function loadSharedTourSongs(){
   try{
@@ -584,6 +597,7 @@ $('tourSongSaveBtn')?.addEventListener('click',async()=>{
 $('randomModeSelect')?.addEventListener('change',async()=>{
   if(randomPlayActive)$('randomStopBtn')?.click();
   if($('randomModeSelect').value==='tour')await loadSharedTourSongs();
+  renderTourRegisteredList();
   $('randomNowPlaying').textContent=$('randomModeSelect').value==='tour'
     ? '家族共有の2026/27ツアー曲からランダム再生します。'
     : '動画登録済み曲からランダム再生します。';
@@ -736,9 +750,11 @@ $('randomPlayToggleBtn')?.addEventListener('click',()=>{
     $('randomPlayerWrap').classList.add('hidden');
     $('randomPlayToggleBtn').textContent='▶ 連続再生';
     $('randomNowPlaying').textContent='停止しました。';
+    renderTourRegisteredList();
     return;
   }
   randomPlayActive=true;
+  renderTourRegisteredList();
   if(!buildYouTubePlaylistEmbed()){
     randomPlayActive=false;
     $('randomPlayToggleBtn').textContent='▶ 連続再生';
@@ -782,6 +798,7 @@ $('randomStopBtn')?.addEventListener('click',()=>{
   $('randomPlayToggleBtn').textContent='▶ 連続再生';
   $('randomNowPlaying').textContent='動画登録済みの曲からランダムで連続再生します。';
   $('randomLyricsTitle').textContent=''; $('randomLyrics').textContent='';
+  renderTourRegisteredList();
 });
 
 function getYoutubeVideoId(url) {
