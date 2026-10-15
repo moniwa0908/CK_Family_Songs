@@ -1,7 +1,12 @@
 {
   "source": "https://c-and-k.info/contents/news",
-  "updatedAt": "2026-10-15T04:37:25.421Z",
+  "updatedAt": "2026-10-15T11:27:37.875Z",
   "items": [
+    {
+      "date": "2026.10.15",
+      "title": "10/18「SORAON Autumn'26」グッズ販売のお知らせ",
+      "url": "https://c-and-k.info/contents/1119224"
+    },
     {
       "date": "2026.10.14",
       "title": "C&K TOUR 2026-2027 福岡〜広島公演「チケットリセール」実施のお知らせ",
@@ -11,11 +16,6 @@
       "date": "2026.10.05",
       "title": "10/11「MAKE A MONOGATARI 2026」グッズ販売のお知らせ",
       "url": "https://c-and-k.info/contents/1116364"
-    },
-    {
-      "date": "2026.10.05",
-      "title": "C&Kメディア出演情報更新!",
-      "url": "https://c-and-k.info/contents/1116359"
     }
   ]
 }
