@@ -1,1 +1,1 @@
-Ver.7.7.3：ツアーモード選択時にFirebase共有登録曲をあいうえお順で表示。再生中は非表示、停止時は再表示。GitHubへ4ファイル上書き。
+Ver.7.7.4: ランダム再生歌詞のYouTube再生時間連動スクロール。ON/OFF可。曲切替・次の曲で先頭へリセット。停止時も先頭へ。7.7.3のツアー登録曲一覧表示も収録。YouTube iframeが再生時刻・再生時間を返す環境で動作します。GitHubへ index.html, app.js, style.css, service-worker.js を上書き。
